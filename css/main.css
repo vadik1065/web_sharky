@@ -1,0 +1,18 @@
+.game-area {
+    width:100%;
+    height:100vh;
+}
+
+@media (pointer: coarse) and (orientation:landscape) {
+    .game-area {
+        width:100%;
+        height:80vh;
+    }
+}
+
+@media (pointer: coarse) and (orientation:portrait) {
+    .game-area {
+        width:100%;
+        height:100vh;
+    }
+}

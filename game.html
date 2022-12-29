@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache">
+
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="../share/js/libs/jquery/jquery-3.6.0.min.js"></script>
+        <script src="../share/js/libs/jquery/jquery-element-onresize.js"></script>
+        <script src="../share/js/libs/pixi/pixi.min.js"></script>
+        <script src="../share/js/libs/howler/howler.min.js"></script>
+
+        <script src="./js/game-bundle.js"></script>
+
+        <style>
+            body {
+                scrollbar-width: 0;
+            }
+            ::-webkit-scrollbar {
+                width: 0;
+            }
+            canvas {
+                margin: -8px 0px 0px -8px;
+            }
+        </style>
+        <style>
+            .loader-area {
+                background-color: rgb(31, 29, 29);
+                border: 5px solid rgb(31,29,29);
+                /* border: 5px solid rgb(69,255,237); */
+                overflow: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: 0;
+
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                direction: ltr;
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                z-index: 1050;
+                outline: none;
+                transform-origin: top left;
+            }
+            .logo-container{
+                margin-bottom: 50px;
+            }
+            .game-title-logo{
+                text-align: center;
+                margin-bottom: 0px;
+            }
+            .game-title-logo img{
+                width: 60vw;
+            }
+            #loading-game{
+                margin: auto;
+                width: 50vw;
+                height: 3px;
+                border: 2px solid rgb(42, 42, 42);
+            }
+            #loading-current{
+                width: 0px;
+                border: 1px solid rgb(71, 96, 40);
+                background-color: rgb(107, 155, 55);
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+        let game;
+        if( 'ontouchstart' in window || navigator.msMaxTouchPoints ) {
+          game = new Game('mobile');
+        }
+        else {
+          game = new Game('desktop');
+        }
+
+        $(() => {
+            const ProgressFinished = 200;
+            const ready = () => {
+                // Hide progress bar
+                $('#loader-area').hide();
+            };
+
+            const $progressBarValue = $('#loading-current');
+            const progressStep = $('#loading-game').width() / ProgressFinished;
+            let progressImages = 0, progressSound = 0;
+            game.addListener('music.progress', progress => {
+                progressSound = progress;
+                $progressBarValue.width(progressStep * (progressSound + progressImages));
+                if (progressSound + progressImages >= ProgressFinished)
+                    ready();
+            }).addListener('image.progress', progress => {
+                progressImages = progress;
+                $progressBarValue.width(progressStep * (progressSound + progressImages));
+                if (progressSound + progressImages >= ProgressFinished)
+                    ready();
+            })
+        });
+
+        </script>
+        <div id="loader-area" class="loader-area">
+          <div id="logo-container" class="logo-container" style="">
+            <div class="game-title-logo">
+              <img src="./images/ui/logo-title.png" alt="logo-title">
+            </div>
+            <div class="loading">
+              <div id="loading-game">
+                <div id="loading-current" style="width:0;"></div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </body>
+</html>

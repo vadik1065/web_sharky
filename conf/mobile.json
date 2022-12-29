@@ -1,0 +1,578 @@
+{
+    "images": {
+        "bkg": {
+            "vertical":   { "width": 1052, "height": 1300, "minWidth":  985, "urls": [ "./images/game/bkg_v.webp" ] },
+            "horizontal": { "width": 2048, "height": 1024, "minWidth": 1800, "urls": [ "./images/game/bkg_h.webp" ] }
+        },
+        "closeIcon": {
+            "x":  0,  "y": 0, "width": 61, "height": 61, "urls": [ "./images/ui/close-icon.png" ]
+        }
+    },
+
+    "symbols": {
+        "size": {
+            "vertical": {
+                "width": 152, "height": 152
+            },
+            "horizontal": {
+                "width": 222, "height": 222
+            }
+        },
+        "scatter": {
+            "id": 3,
+            "color": "0xFFFF00",
+            "first": 11,
+            "last": 12
+        },
+        "info": {
+            "1": {
+                "totalBet": false, "values": [ 5000, 1000, 100, 5, 2 ],
+                "normal": {
+                    "url": "./images/game/symbols/1.jpg.webp",
+                    "sprite": { "columns": 9, "count": 81, "url": "./images/game/symbols/win/1.jpg.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/1.jpg.webp",
+                    "sprite": { "columns": 9, "count": 81, "url": "./images/game/symbols/win/1.jpg.webp" }
+                }
+            },
+            "2": {
+                "totalBet": false, "values": [ 1000, 250, 50 ],
+                "normal": {
+                    "url": "./images/game/symbols/2.jpg.webp",
+                    "sprite": { "columns": 9, "count": 58, "url": "./images/game/symbols/win/2.png.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/2.jpg.webp",
+                    "sprite": { "columns": 9, "count": 58, "url": "./images/game/symbols/win/2.png.webp" }
+                }
+            },
+            "3": {
+                "totalBet": true, "values": [ 100, 20, 5 ],
+                "normal": {
+                    "url": "./images/game/symbols/3.jpg.webp",
+                    "sprite": { "columns": 8, "count": 48, "url": "./images/game/symbols/win/3.png.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/3.jpg.webp",
+                    "sprite": { "columns": 8, "count": 48, "url": "./images/game/symbols/win/3.png.webp" }
+                }
+            },
+            "4": {
+                "totalBet": false, "values": [ 500, 125, 25 ],
+                "normal": {
+                    "url": "./images/game/symbols/4.jpg.webp",
+                    "sprite": { "columns": 9, "count": 27, "url": "./images/game/symbols/win/4.jpg.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/4.jpg.webp",
+                    "sprite": { "columns": 9, "count": 27, "url": "./images/game/symbols/win/4.jpg.webp" }
+                }
+            },
+            "5": {
+                "totalBet": false, "values": [ 250, 100, 20 ],
+                "normal": {
+                    "url": "./images/game/symbols/5.jpg.webp",
+                    "sprite": { "columns": 9, "count": 60, "url": "./images/game/symbols/win/5.png.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/5.jpg.webp",
+                    "sprite": { "columns": 9, "count": 60, "url": "./images/game/symbols/win/5.png.webp" }
+                }
+            },
+            "6": {
+                "totalBet": false, "values": [ 150, 50, 10 ],
+                "normal": {
+                    "url": "./images/game/symbols/6.jpg.webp",
+                    "animate": "./images/game/symbols/win/6.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/6.jpg.webp",
+                    "animate": "./images/game/symbols/win/6.jpg.webp"
+                }
+            },
+            "7": {
+                "totalBet": false, "values": [ 150, 50, 10 ],
+                "normal": {
+                    "url": "./images/game/symbols/7.jpg.webp",
+                    "animate": "./images/game/symbols/win/7.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/7.jpg.webp",
+                    "animate": "./images/game/symbols/win/7.jpg.webp"
+                }
+            },
+            "8": {
+                "totalBet": false, "values": [ 100, 20, 5 ],
+                "normal": {
+                    "url": "./images/game/symbols/8.jpg.webp",
+                    "animate": "./images/game/symbols/win/8.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/8.jpg.webp",
+                    "animate": "./images/game/symbols/win/8.jpg.webp"
+                }
+            },
+            "9": {
+                "totalBet": false, "values": [ 100, 25, 5, 2 ],
+                "normal": {
+                    "url": "./images/game/symbols/9.jpg.webp",
+                    "animate": "./images/game/symbols/win/9.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/9.jpg.webp",
+                    "animate": "./images/game/symbols/win/9.jpg.webp"
+                }
+            },
+            "10": {
+                "totalBet": false, "values": [ 100, 20, 5 ],
+                "normal": {
+                    "url": "./images/game/symbols/10.jpg.webp",
+                    "animate": "./images/game/symbols/win/10.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/10.jpg.webp",
+                    "animate": "./images/game/symbols/win/10.jpg.webp"
+                }
+            },
+            "11": {
+                "totalBet": true, "values": [ 5 ],
+                "normal": {
+                    "url": "./images/game/symbols/11.jpg.webp",
+                    "sprite": { "columns": 8, "count": 66, "width": 100, "height": 100, "url": "./images/game/symbols/win/11.png.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/11.jpg.webp",
+                    "sprite": { "columns": 8, "count": 66, "width": 100, "height": 100, "url": "./images/game/symbols/win/11.png.webp" }
+                }
+            },
+            "12": {
+                "totalBet": false, "values": [ 0 ],
+                "normal": {
+                    "url": "./images/game/symbols/12.jpg.webp"
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/12.jpg.webp"
+                }
+            },
+            "13": {
+                "totalBet": false, "values": [ 0 ],
+                "normal": {
+                    "url": "./images/game/symbols/13.jpg.webp",
+                    "sprite": { "columns": 6, "count": 30, "width": 100, "height": 100, "url": "./images/game/symbols/win/13.png.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/13.jpg.webp",
+                    "sprite": { "columns": 6, "count": 30, "width": 100, "height": 100, "url": "./images/game/symbols/win/13.png.webp" }
+                }
+            },
+            "14": {
+                "totalBet": false, "values": [ 0 ],
+                "normal": {
+                    "url": "./images/game/symbols/14.jpg.webp",
+                    "sprite": { "columns": 13, "count": 91, "width": 100, "height": 100, "url": "./images/game/symbols/win/14.jpg.webp" }
+                },
+                "bonus": {
+                    "url": "./images/game/symbols/14.jpg.webp",
+                    "sprite": { "columns": 13, "count": 91, "width": 100, "height": 100, "url": "./images/game/symbols/win/14.jpg.webp" }
+                }
+            }
+        }
+    },
+
+    "reelDef": {
+        "rotateStep": 37,
+        "pos": {
+            "vertical": [
+                { "x": 115, "y": 97 },
+                { "x": 283, "y": 97 },
+                { "x": 450, "y": 97 },
+                { "x": 617, "y": 97 },
+                { "x": 784, "y": 97 }
+            ],
+            "horizontal": [
+                { "x": 425,  "y": 142 },
+                { "x": 670,  "y": 142 },
+                { "x": 913,  "y": 142 },
+                { "x": 1157, "y": 142 },
+                { "x": 1401, "y": 142 }
+            ]
+        }
+    },
+
+    "lines": {
+        "1": {
+            "form": [1,1,1,1,1], "type": 1, "color": "0x468DEC", "urls": [ "./images/game/lines/1.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 306, "width": 60, "height": 38 },
+                "horizontal": { "x": 325, "y": 446, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 306, "width": 60, "height": 38 },
+                "horizontal": { "x": 1655, "y": 446, "width": 76, "height": 56 }
+            }
+        },
+        "2": {
+            "form": [0,0,0,0,0], "type": 1, "color": "0xCD1B1C", "urls": [ "./images/game/lines/2.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 174, "width": 60, "height": 38 },
+                "horizontal": { "x": 325, "y": 254, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 174, "width": 60, "height": 38 },
+                "horizontal": { "x": 1655, "y": 254, "width": 76, "height": 56 }
+            }
+        },
+        "3": {
+            "form": [2,2,2,2,2], "type": 1, "color": "0x1F7411", "urls": [ "./images/game/lines/3.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 438, "width": 60, "height": 38 },
+                "horizontal": { "x": 325, "y": 638, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 438, "width": 60, "height": 38 },
+                "horizontal": { "x": 1655, "y": 638, "width": 76, "height": 56 }
+            }
+        },
+        "4": {
+            "form": [0,1,2,1,0], "type": 2, "color": "0xE5D016", "urls": [ "./images/game/lines/4.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 130, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 190, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 130, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 190, "width": 76, "height": 56 }
+            }
+        },
+        "5": {
+            "form": [2,1,0,1,2], "type": 3, "color": "0xD461AF", "urls": [ "./images/game/lines/5.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 482, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 702, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 482, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 702, "width": 76, "height": 56 }
+            }
+        },
+        "6": {
+            "form": [1,2,2,2,1], "type": 4, "color": "0xA3CC2E", "urls": [ "./images/game/lines/6.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 262, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 382, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 262, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 382, "width": 76, "height": 56 }
+            }
+        },
+        "7": {
+            "form": [1,0,0,0,1], "type": 5, "color": "0xCA8773", "urls": [ "./images/game/lines/7.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 350, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 510, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 350, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 510, "width": 76, "height": 56 }
+            }
+        },
+        "8": {
+            "form": [2,2,1,0,0], "type": 6, "color": "0x95C7CE", "urls": [ "./images/game/lines/8.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 394, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 574, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 218, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 318, "width": 76, "height": 56 }
+            }
+        },
+        "9": {
+            "form": [0,0,1,2,2], "type": 7, "color": "0xD49039", "urls": [ "./images/game/lines/9.png" ],
+            "left": {
+                "vertical": { "x": 40, "y": 218, "width": 60, "height": 38 }, "horizontal": { "x": 325, "y": 318, "width": 76, "height": 56 }
+            },
+            "right": {
+                "vertical": { "x": 955, "y": 394, "width": 60, "height": 38 }, "horizontal": { "x": 1655, "y": 574, "width": 76, "height": 56 }
+            }
+        }
+    },
+
+    "controlDef": {
+        "menu": {
+            "vertical":   {
+                "x":  105,  "y": 574, "width":  280, "height":  140, "urls": [ "./images/ui/box-v.png" ],
+                "text": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 500,  "y": 850, "width": 140, "height": 140, "urls": [ "./images/ui/box-h.png" ],
+                "text": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 26 }
+            }
+        },
+        "lines": {
+            "vertical":   {
+                "x": 665, "y": 574, "width":  280, "height": 140, "urls": [ "./images/ui/box-v.png" ],
+                "text1": { "y": 37, "align": "centerX", "color": "0xFFFFFF", "fontSize": 28 },
+                "text2": { "y": 73, "align": "centerX", "color": "0xF5FA05", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 640,  "y": 850, "width": 140, "height": 140, "urls": [ "./images/ui/box-h.png" ],
+                "text1": { "y": 40, "align": "centerX", "color": "0xFFFFFF", "fontSize": 26 },
+                "text2": { "y": 70, "align": "centerX", "color": "0xF5FA05", "fontSize": 28 }
+            }
+        },
+        "totalBet": {
+            "vertical":   {
+                "x": 665, "y": 720, "width": 280, "height": 140, "urls": [ "./images/ui/box-v.png" ],
+                "text1": { "y": 37, "align": "centerX", "color": "0xFFFFFF", "fontSize": 24 },
+                "text2": { "y": 73, "align": "centerX", "color": "0xF5FA05", "fontSize": 28 },
+                "text3": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 1725,  "y": 550, "width": 200, "height": 200, "urls": [ "./images/ui/circle.png" ],
+                "text1": { "y": 70, "align": "centerX", "color": "0xFFFFFF", "fontSize": 26 },
+                "text2": { "y": 100, "align": "centerX", "color": "0xF5FA05", "fontSize": 28 },
+                "text3": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 28 }
+            }
+        },
+        "infoBox": {
+            "vertical":   {
+                "x": 100, "y": 865, "width": 847, "height": 140, "urls": [ "./images/ui/msgbox-v.png", "./images/ui/msgbox-active-v.png" ],
+                "above": { "y": 0, "height": 100, "width": 847, "align": "center", "color": "0xFFFFFF", "highlite": "0x4FFF4F", "fontSize": 28, "lineHeight": 34 },
+                "below": { "y1": 70, "y2": 80, "height": 50, "width": 847, "align": "center", "color": "0xFFFFFF", "fontSize": 22 },
+                "jackpot": { "color": "0x4FFF4F", "disabled": "0x808080", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 780, "y": 850, "width": 520, "height": 140, "urls": [ "./images/ui/msgbox-h.png", "./images/ui/msgbox-active-h.png" ],
+                "above": { "y": 0, "height": 100, "width": 520, "align": "center", "color": "0xFFFFFF", "highlite": "0x4FFF4F", "fontSize": 26, "lineHeight": 34 },
+                "below": { "y1": 70, "y2": 80, "height": 40, "width": 520, "align": "center", "color": "0xFFFFFF", "fontSize": 20 },
+                "jackpot": { "color": "0x4FFF4F", "disabled": "0x808080", "fontSize": 24 }
+            }
+        },
+        "maxBet": {
+            "vertical":   {
+                "x": 370, "y": 574, "width":  72, "height": 72, "urls": [ "" ],
+                "text": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 1300, "y": 850, "width": 140, "height": 140, "urls": [ "./images/ui/box-h.png" ],
+                "text": { "y": 0, "align": "center", "color": "0xF5FA05", "fontSize": 26 }
+            }
+        },
+        "autoPlay": {
+            "vertical":   {
+                "x": 105, "y": 720, "width": 280, "height": 140, "urls": [ "./images/ui/auto-play-v.png", "./images/ui/auto-play-active-v.png" ],
+                "text": { "y": 37, "align": "centerX", "color": "0xFFFFFF", "fontSize": 28 }
+            },
+            "horizontal": {
+                "x": 1440, "y": 850, "width": 140, "height": 140, "urls": [ "./images/ui/auto-play-h.png", "./images/ui/auto-play-active-h.png" ],
+                "text": { "y": 30, "align": "centerX", "color": "0xFFFFFF", "fontSize": 26 }
+            }
+        },
+        "start": {
+            "vertical":   {
+                "x": 375, "y": 570, "width":  300, "height": 300, "urls": [ "./images/ui/start-v.png" ],
+                "text": { "x": 0, "align": "center", "fontSize": 28, "color": "0x4FFF4F" }
+            },
+            "horizontal": {
+                "x": 1725, "y": 300, "width": 200, "height": 200, "urls": [ "./images/ui/start-v.png" ],
+                "text": { "x": 0, "align": "center", "fontSize": 25, "color": "0x4FFF4F" }
+            }
+        },
+        "helpPrev": {
+            "vertical":   { "x": 115, "y": 865, "width": 200, "height": 140, "urls": [ "./images/ui/help-prev.png" ] },
+            "horizontal": { "x": 780, "y": 850, "width": 170, "height": 140, "urls": [ "./images/ui/help-prev.png" ] }
+        },
+        "helpClose": {
+            "vertical":   { "x": 425, "y": 865, "width": 200, "height": 140, "urls": [ "./images/ui/help-close.png" ] },
+            "horizontal": { "x": 955, "y": 850, "width": 170, "height": 140, "urls": [ "./images/ui/help-close.png" ] }
+        },
+        "helpNext": {
+            "vertical":   { "x": 735, "y": 865, "width": 200, "height": 140, "urls": [ "./images/ui/help-next.png" ] },
+            "horizontal": { "x": 1130, "y": 850, "width": 170, "height": 140, "urls": [ "./images/ui/help-next.png" ] }
+        }
+    },
+
+    "menuDef": {
+        "window": {
+            "vertical":   {
+                "x": 115,  "y": 165, "width":  340, "height":  420, "fill": "0x303030",
+                "border": { "width": 1, "color": "0xFFFFFF", "radius": 7 }
+            },
+            "horizontal": {
+                "x": 510,  "y": 435, "width": 340, "height": 420, "fill": "0x303030",
+                "border": { "width": 1, "color": "0xFFFFFF", "radius": 7 }
+            }
+        },
+        "items": {
+            "signInOut": {
+                "x": 20, "y": 20, "width": 300, "height": 60, "labels": [ "SIGN IN", "SIGN OUT" ],
+                "icon": { "x": 10, "y": 8, "width": 46, "height": 46, "urls": [ "./images/menu/person.png", "./images/menu/person.png" ] }
+            },
+            "paytable": {
+                "x": 20, "y": 100, "width": 300, "height": 60, "labels": [ "PAYTABLE & INFO" ],
+                "icon": { "x": 10, "y": 8, "width": 46, "height": 46, "urls": [ "./images/menu/paytable.png" ] }
+            },
+            "deposit": {
+                "x": 20, "y": 180, "width": 300, "height": 60, "labels": [ "DEPOSIT" ],
+                "icon": { "x": 10, "y": 8, "width": 46, "height": 46, "urls": [ "./images/menu/deposit.png" ] }
+            },
+            "sound": {
+                "x": 20, "y": 260, "width": 300, "height": 60, "labels": [ "SOUND ON", "SOUND OFF" ],
+                "icon": { "x": 10, "y": 8, "width": 46, "height": 46, "urls": [ "./images/menu/sound-on.png", "./images/menu/sound-off.png" ] }
+            },
+            "fullScreen": {
+                "x": 20, "y": 340, "width": 300, "height": 60, "labels": [ "FULLSCREEN" ],
+                "icon": { "x": 10, "y": 8, "width": 46, "height": 46, "urls": [ "./images/menu/screen-on.png", "./images/menu/screen-off.png" ] }
+            }
+        }
+    },
+
+    "helpDef": {
+        "vertical":   {
+            "x": 102, "y": 88, "width": 850, "height": 472
+        },
+        "horizontal": {
+            "x": 407, "y": 128, "width": 1240, "height": 692
+        },
+        "urls": [ "./images/game/help/paytable.jpg.webp", "./images/game/help/page-2.jpg.webp", "./images/game/help/infotable.jpg.webp" ],
+        "title": {
+            "color": "0xF0F622",
+            "fontName": "New Times Roman",
+            "fontSize": 60
+        },
+        "text1_1": {
+            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 22, "lineHeight": 24
+        },
+        "text1_2": {
+            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 26
+        },
+        "text2": {
+            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 32, "lineHeight": 36
+        },
+        "text3": {
+            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 30, "lineHeight": 40
+        }
+    },
+
+    "riskGameDef": {
+        "vertical": { "x": 66, "y": 86, "width": 850, "height": 475 },
+        "horizontal": { "x": 410, "y": 138, "width": 1232, "height": 672 },
+        "cards": {
+            "path": "../share/images/risk_cards/",
+            "openSprite": "./images/game/risk/RubWhiteSprite.png",
+            "closeSprite": "./images/game/risk/WhiteRubSprite.png"
+        },
+        "bkgImage": { "urls": ["./images/game/risk/gamble.jpg.webp"] },
+        "dealerButton": {
+            "vertical": {
+                "x": 25, "y": 250, "width": 200, "height": 60
+            },
+            "horizontal": {
+                "x": 70, "y": 350, "width": 270, "height": 90
+            },
+            "urls": ["./images/game/risk/dealer_btn.png"]
+        },
+        "pickButton": { "urls": ["./images/game/risk/pick_btn.png"] }
+    },
+
+    "bonusDef": {
+        "bkg": {
+            "vertical":   { "width":  985, "height": 1300, "minWidth":  985, "urls": [ "./images/game/bkg_bonus_v.png.webp" ] },
+            "horizontal": { "width": 2048, "height": 1024, "minWidth": 1470, "urls": [ "./images/game/bkg_bonus_h.jpg.webp" ] }
+        },
+        "banner": {
+            "vertical":   { "x": 185, "y": 140, "width": 600, "height": 360, "urls": [ "./images/game/bonus/banner.png.webp" ] },
+            "horizontal": { "x": 550, "y": 200, "width": 952, "height": 546, "urls": [ "./images/game/bonus/banner.png.webp" ] },
+            "text": { "fontName": "Times New Roman", "fontSize": 50, "color": "0xffff00", "lineHeight": 52 }
+        },
+        "book": {
+            "vertical": { "x": 360, "y": 335, "width": 260, "height": 120 },
+            "horizontal": { "x": 830, "y": 500, "width": 400, "height": 180 },
+            "sprite": { "loop": false, "columns": 3, "count": 27, "width": 200, "height": 90, "url": "./images/game/bonus/book-opening.png.webp" },
+            "symbols": { "x": 48, "y": 24, "width": 105, "height": 105 }
+        }
+    },
+
+    "linesWinDef": {
+        "vertical":   {
+            "y": 180, "align": "centerX", "width": 650, "height": 300, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "horizontal": {
+            "y": 320, "align": "centerX", "width": 650, "height": 300, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "buttons": {
+            "width": 105,
+            "height": 50,
+            "fill": "0",
+            "valueColor": "0xFFCC00",
+            "fontSize": 24,
+            "border": {
+                "width": 2,
+                "color": "0xFFCC00",
+                "radius": 5
+            }
+        }
+    },
+
+    "betWinDef": {
+        "vertical":   {
+            "y": 80, "align": "centerX", "width": 750, "height": 500, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "horizontal": {
+            "y": 240, "align": "centerX", "width": 750, "height": 500, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "buttons": {
+            "width": 120,
+            "height": 50,
+            "fill": "0",
+            "valueColor": "0xFFCC00",
+            "fontSize": 24,
+            "border": {
+                "width": 2,
+                "color": "0xFFCC00",
+                "radius": 5
+            }
+        }
+    },
+
+    "dialogDef": {
+        "vertical":   {
+            "y": 130, "align": "centerX", "width": 750, "height": 400, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "horizontal": {
+            "y": 290, "align": "centerX", "width": 750, "height": 400, "fill": "0x303030",
+            "border": { "width": 2, "color": "0xFFFFFF", "radius": 7 }
+        },
+        "text": {
+            "color": "0xFFFFFF",
+            "fontSize": 24
+        },
+        "buttons": {
+            "height": 50,
+            "fill": "0x303030",
+            "valueColor": "0xFFCC00",
+            "fontSize": 24,
+            "border": {
+                "width": 2,
+                "color": "0xFFCC00",
+                "radius": 5
+            }
+        }
+    },
+
+    "jackpotDef": {
+        "vertical":   {
+            "x": 100,  "y": 130, "width": 785, "height": 400, "urls": [ "./images/game/jackpot/background.png" ]
+        },
+        "horizontal": {
+            "x": 540,  "y": 250, "width": 980, "height": 500, "urls": [ "./images/game/jackpot/background.png" ]
+        },
+        "text1": { "y": 70, "align": "centerX", "color": "0xFF2E50", "fontSize": 70 },
+        "text2": { "y": 170, "align": "centerX", "color": "0xBACDDD", "fontSize": 40 },
+        "text3": { "y": 230, "align": "centerX", "color": "0xFFCA19", "fontSize": 80 },
+        "text4": { "y": 320, "align": "centerX", "color": "0xFFCA19", "fontSize": 40 }
+    },
+
+    "options": {
+        "demoLimitTime": 0,
+        "logEnabled": true
+    }
+}
