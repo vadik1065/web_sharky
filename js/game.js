@@ -2167,6 +2167,7 @@ class Game extends GameItem {
         if ( lineNum === "101" ) {  // выпали скаттер-символы начала бонус игры
             game.currentWinLineSound = '';
             this.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
+            return;
         }
 
         if ( lineNum === "100" ) {  // выпали обычные скаттер-символы (компас)
@@ -2177,48 +2178,42 @@ class Game extends GameItem {
 
         // Найти основной символ выигрышной линии
 
-        let symbolId;
+        let soundFile;
+        let pirate = 0;
         let finalSymbols = game.serverData.setSymbols;      // символы останова
         let winLine = game.lines[ lineNum ].form;           // форма выигрышной линии
         for ( let i = 0; i < winSymCount; ++i ) {
-            let symbolPos = winLine[i];
-            if ( finalSymbols[i][symbolPos] !== game.symbols.scatter.id ) {
-                symbolId = finalSymbols[i][symbolPos];
+
+            var symbolPos = winLine[i];
+            var sId = finalSymbols[i][symbolPos];    // номер (ID) символа
+
+            if ( (sId === 6 || sId === 7) && winSymCount >= 4 ) {  // символы "K" и "Q"
+                soundFile = "origin/win_kq";
                 break;
             }
-        }
-
-        // Определить звуковой файл для проигрывания музыки
-
-        let soundFile;
-
-        if ( (symbolId === 6 || symbolId === 7) && winSymCount >= 4 ) {  // символы "K" и "Q"
-            soundFile = "origin/win_kq";
-        }
-        else if ( (8 <= symbolId  && symbolId <= 10) && winSymCount >= 4 ) {    // символы "9", "10", "J"
-            soundFile = "origin/win_jt9";
-        }
-        else if ( symbolId === 4 ) {                // символ "сундук"
-            soundFile = ( winSymCount <= 4 ) ? "origin/win_chest2" : "origin/win_chest";
-        }
-        else if ( symbolId === 2 ) {                // символ "попугай"
-            soundFile = ( winSymCount <= 4 ) ? "origin/win_parrot2" : "origin/win_parrot";
-        }
-        else if ( symbolId === 5 ) {                // символ "сабли"
-            soundFile = ( winSymCount <= 4 ) ? "origin/win_sword2" : "origin/win_sword";
+            if ( (8 <= sId  && sId <= 10) && winSymCount >= 4 ) {    // символы "9", "10", "J"
+                soundFile = "origin/win_jt9";
+                break;
+            }
+            if ( sId === 4 ) {                // символ "сундук"
+                soundFile = ( winSymCount <= 4 ) ? "origin/win_chest2" : "origin/win_chest";
+                break;
+            }
+            if ( sId === 2 ) {                // символ "попугай"
+                soundFile = ( winSymCount <= 4 ) ? "origin/win_parrot2" : "origin/win_parrot";
+                break;
+            }
+            if ( sId === 5 ) {                // символ "сабли"
+                soundFile = ( winSymCount <= 4 ) ? "origin/win_sword2" : "origin/win_sword";
+                break;
+            }
+            if ( sId === 1 ) {               // символ "пират"
+                ++pirate;
+            }
         }
 
         if ( ! soundFile ) {
-
-            let pirateCount = 0;
-            for ( let i = 0; i < winSymCount; ++i ) {
-                let symbolPos = winLine[i];
-                if ( finalSymbols[i][symbolPos] == 1 ) {
-                    pirateCount += 1;
-                }
-            }
-
-            if ( pirateCount >= 3 ) {
+            if ( pirate >= 3 ) {
                 soundFile = "origin/win_pirate";
             }
             else {
@@ -2248,7 +2243,7 @@ class Game extends GameItem {
         }
         else {
             // Если не задан звук - просто пауза
-            Log.out( 'Skip win line sound' );
+            Log.warn( 'Skip win line sound' );
             game.currentWinLineSound = '';
             this.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
         }
@@ -2975,7 +2970,6 @@ class Game extends GameItem {
 
             this.specSymbol = -1;
 
-            this.startBanner.hideBook();
             this.textBanner.hide();
             this.background.setBonusMode( false );
             this.reelBox.setBonusMode( false );
@@ -2999,7 +2993,7 @@ class Game extends GameItem {
     startBonusRotate() {
 
         // Закрываем стартовый баннер
-        this.startBanner.hide();
+        this.textBanner.hide();
 
         // Включаем фоновую музыку
         this.playLoop( 'background2' );

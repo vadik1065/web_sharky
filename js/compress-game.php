@@ -45,6 +45,7 @@
     include("lines/winsymbol.js");
     include("lines/winbox.js");
     include("lines/scatterline.js");
+    include("lines/bonusline.js");
     include("lines/line.js");
     include("lines/linebox.js");
     include("windows/lineswindow.js");

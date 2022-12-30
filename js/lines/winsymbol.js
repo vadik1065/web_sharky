@@ -56,21 +56,28 @@ class WinSymbol extends GameItem {
             speed = 0.05;
         }
         else {
-            Log.error( '### Line: not found animation style for symbol ' + symbol );
+            Log.warn( '### Line: not found animation style for symbol ' + symbol );
         }
-        this.textures = textures;
-        this.anime = new PIXI.AnimatedSprite( textures );
-        this.anime.animationSpeed = speed;
-        this.anime.loop = true;
-        this.anime.play();
-        this.pixiObj.addChild( this.anime );
 
+        if ( speed == 0 ) {
+            this.anime = null;
+        }
+        else {
+            this.textures = textures;
+            this.anime = new PIXI.AnimatedSprite( textures );
+            this.anime.animationSpeed = speed;
+            this.anime.loop = true;
+            this.anime.play();
+            this.pixiObj.addChild( this.anime );
+        }
     }
 
     destroy() {
-        this.pixiObj.removeChild( this.anime );
-        this.anime.destroy();
-        this.anime = null;
+        if ( this.anime ) {
+            this.pixiObj.removeChild( this.anime );
+            this.anime.destroy();
+            this.anime = null;
+        }
     }
 
     draw() {

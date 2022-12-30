@@ -138,8 +138,7 @@
             "11": {
                 "totalBet": true, "values": [ 5 ],
                 "normal": {
-                    "url": "./images/game/symbols/11.jpg.webp",
-                    "sprite": { "columns": 8, "count": 66, "width": 100, "height": 100, "url": "./images/game/symbols/win/11.png.webp" }
+                    "url": "./images/game/symbols/11.jpg.webp"
                 },
                 "bonus": {
                     "url": "./images/game/symbols/11.jpg.webp",
@@ -470,19 +469,13 @@
 
     "bonusDef": {
         "bkg": {
-            "vertical":   { "width":  985, "height": 1300, "minWidth":  985, "urls": [ "./images/game/bkg_bonus_v.png.webp" ] },
-            "horizontal": { "width": 2048, "height": 1024, "minWidth": 1470, "urls": [ "./images/game/bkg_bonus_h.jpg.webp" ] }
+            "vertical":   { "width":  985, "height": 1300, "minWidth":  985, "urls": [ "./images/game/bkg_v.webp" ] },
+            "horizontal": { "width": 2048, "height": 1024, "minWidth": 1470, "urls": [ "./images/game/bkg_h.webp" ] }
         },
         "banner": {
             "vertical":   { "x": 185, "y": 140, "width": 600, "height": 360, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "horizontal": { "x": 550, "y": 200, "width": 952, "height": 546, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "text": { "fontName": "Times New Roman", "fontSize": 50, "color": "0xffff00", "lineHeight": 52 }
-        },
-        "book": {
-            "vertical": { "x": 360, "y": 335, "width": 260, "height": 120 },
-            "horizontal": { "x": 830, "y": 500, "width": 400, "height": 180 },
-            "sprite": { "loop": false, "columns": 3, "count": 27, "width": 200, "height": 90, "url": "./images/game/bonus/book-opening.png.webp" },
-            "symbols": { "x": 48, "y": 24, "width": 105, "height": 105 }
         }
     },
 

@@ -14,8 +14,6 @@ class ReelBox extends GameItem {
 
     symbols;            // массив текстур символов
 
-    reels;              // массив описаний барабанов
-
     rotateStep;         // шаг сдвига смиволов при вращении
 
     rotated;            // флаг вращения

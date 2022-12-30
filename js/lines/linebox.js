@@ -18,6 +18,8 @@ class LineBox extends GameItem {
 
     scatterLine;        // объект линии по скаттер-символам
 
+    bonusLine;          // объект линии из скаттер-символов бонус-игры
+
     winLines;           // описание выигрышных линий
     winLineNums;        // массив номеров линий (в формате строк)
     winLineIndex;       // индекс текущей выигрышной линии в массиве номеров
@@ -48,6 +50,12 @@ class LineBox extends GameItem {
 
         this.scatterLine = new ScatterLine( this, {
             symbolId: game.symbols.scatter.id,
+            color: game.symbols.scatter.color,
+        });
+
+        this.bonusLine = new BonusLine( this, {
+            first: game.symbols.scatter.first,
+            last: game.symbols.scatter.last,
             color: game.symbols.scatter.color,
         });
     }
@@ -149,10 +157,13 @@ class LineBox extends GameItem {
         // Показать выигрыш по текущей линии
 
         let num = this.winLineNums[ this.winLineIndex ];    // номер линии от 1 в виде строки
-        if ( num == '100' ) {   // выпали скаттер-символы
+        if ( num == '100' ) {       // выпали обычные скаттер-символы
             this.scatterLine.showWin( this.winLines[ num ] );
         }
-        else {                  // выигрыш по линии
+        else if ( num == '101' ) {  // выпали скаттер-символы бонус-игры
+            this.bonusLine.showWin( this.winLines[ num ] );
+        }
+        else {                      // выигрыш по линии
             let index =this.animatedSymbols.length + parseInt( num ) - 1;
             this.children[ index ].showWin( this.winLines[ num ] );
         }
@@ -187,10 +198,13 @@ class LineBox extends GameItem {
         // Спрятать текущую линию
 
         let num = self.winLineNums[ self.winLineIndex ];    // номер линии от 1 в виде строки
-        if ( num == '100' ) {   // выпали скаттер-символы
+        if ( num == '100' ) {       // выпали скаттер-символы
             self.scatterLine.hideWin();
         }
-        else {                  // выигрыш по линии
+        else if ( num == '101' ) {  // выпали скаттер-символы
+            self.bonusLine.hideWin();
+        }
+        else {                      // выигрыш по линии
             self.children[ parseInt( num ) - 1 ].hideWin();
         }
 
@@ -215,6 +229,9 @@ class LineBox extends GameItem {
             let num = this.winLineNums[ i ];
             if ( num == '100' ) {
                 this.scatterLine.clearWin();
+            }
+            else if ( num == '101' ) {
+                this.bonusLine.clearWin();
             }
             else {
                 this.children[ parseInt( num ) - 1 ].clearWin();
