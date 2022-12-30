@@ -15,8 +15,8 @@ class RiskCard extends ImageItem {
   longFeatur = [];
 
   static animeParams = {
-    vertical: { width: 110, height: 185 },
-    horizontal: { width: 150, height: 260 }
+    horizontal: { width: 150, height: 260 },
+    vertical: { width: 110, height: 190 },
   };
 
   constructor(parent, index, options, thisBox = {}) {
@@ -115,6 +115,7 @@ class RiskCard extends ImageItem {
           resolve();
         };
       }else{
+        this.anime.visible = true;
         this.anime.play();
         this.anime.onLoop = () => {
           this.rotate = false;
@@ -131,6 +132,7 @@ class RiskCard extends ImageItem {
     Game.instance().startPlay("23_btd_card_open");
     await this.animationCard();
     thisBox.riskCardDiller.face.setVisible?.(true);
+    this.anime.visible = false;
   }
 
   // логика при перевороте
@@ -143,6 +145,7 @@ class RiskCard extends ImageItem {
     } else {
       if (this.anime) await this.animationCard();
       this.riskCards.faces[id]?.setVisible(true);
+      this.anime.visible = false;
     }
 
     this.face = !this.face;
