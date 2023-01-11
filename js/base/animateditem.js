@@ -11,16 +11,46 @@ class AnimatedItem extends GameItem {
     /** Массив текстур для анимации изображения */
     textures;
 
+    /**
+     * Параметры анимации:
+     * sprite {
+     *    columns - число колонок в картинке анимации
+     *    count - общее число кадров анимации
+     *    width - ширина кадра
+     *    height - высота кадра
+     *    url - адрес картинки для анимации
+     * }
+     */
     options;
 
     constructor( parent, options ) {
 
         super( parent );
 
-        let game = Game.instance();
         this.options = Tools.clone( options );
-        let opt = game.isVertical() ? this.options.vertical : this.options.horizontal;
+        this.update();
+    }
 
+    destroy() {
+        if ( this.imageSprite ) {
+            this.stop();
+            this.setVisible( false );
+            this.pixiObj.removeChild( this.imageSprite );
+            this.imageSprite.destroy();
+            this.imageSprite = null;
+            delete this.textures;
+            this.textures = null;
+        }
+    }
+
+    update() {
+
+        Log.out( 'AnimationItem: update 1' );
+        if ( this.imageSprite ) {
+            this.pixiObj.removeChild( this.imageSprite );
+        }
+
+        Log.out( 'AnimationItem: update 2' );
         let spriteDef = this.options.sprite;
         let sprite = PIXI.Texture.from( spriteDef.url );
         let pageTextures = [];
@@ -34,12 +64,14 @@ class AnimatedItem extends GameItem {
         }
         this.textures = pageTextures;
 
+        Log.out( 'AnimationItem: update 3' );
         this.imageSprite = new PIXI.AnimatedSprite( this.textures );
         this.pixiObj.addChild( this.imageSprite );
+        this.imageSprite.visible = false;
 
         Log.out( 'Total book frames: ' + this.imageSprite.totalFrames );
 
-        this.imageSprite.animationSpeed = 0.2;
+        this.imageSprite.animationSpeed = ( this.options.speed ) ? this.options.speed : 0.2;
         this.imageSprite.loop = spriteDef.loop;
         this.imageSprite.onComplete = ()=>{
             this.emit( 'animationStopped' );
@@ -56,9 +88,14 @@ class AnimatedItem extends GameItem {
         this.imageSprite.gotoAndPlay( 0 );
     }
 
+    stop() {
+        this.imageSprite.stop();
+    }
+
     scale() {
         return this.parent.scale();
     }
+
     pos() {
         return {
             x: this.imageSprite.x,

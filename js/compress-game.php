@@ -56,6 +56,7 @@
     include("risk/riskcard.js");
     include("risk/riskbox.js");
     include("bonus/textbanner.js");
+    include("bonus/movingboat.js");
     include("background.js");
     include("game.js");
 

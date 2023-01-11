@@ -81,6 +81,18 @@ class ReelBox extends GameItem {
         return this.children[ index ];
     }
 
+    scale() {
+        return Tools.clone( Game.instance().scale() );
+    }
+
+    pos() {
+        let p = this.children[ 0 ].pos();
+        return {
+            x: p.x,
+            y: p.y
+        }
+    }
+
     /**
      * Обновить положение и размеры барабанов.
      */

@@ -1616,7 +1616,6 @@ class Game extends GameItem {
         this.controlItem( 'totalBet' ).draw();
         if ( this.totalBet > this.balance() ) {
             this.controlItem('autoPlay').setEnabled( false );
-            //this.controlBox.item('start').setEnabled( false );
         }
         this.updateJackpots( this.serverData );
     }
@@ -2065,13 +2064,10 @@ class Game extends GameItem {
     onRotationStopped() {
 
         let game = Game.instance();
-        if ( game.isBonusProcess ) {    // в процессе бонус-игры
-            //game.showMsgAbove( 'GAME OVER, PLACE YOUR BET' );
-        }
-        else {                          // в обычной игре
+        if ( ! game.isBonusProcess ) {      // в обычной игре
             game.stopPlay( 'reelrun' );
             game.hideJackpotInfo();
-            game.showMsgAbove( 'GAME OVER, PLACE YOUR BET' );
+            game.showMsgAbove( 'PLACE YOUR BET' );
             game.showBalance();
         }
 
@@ -2086,36 +2082,30 @@ class Game extends GameItem {
                 return;
             }
 
-            // Проверить наличие выигрышных линий
+            if ( ! game.isBonusProcess ) {  // в процессе обычной игры
 
-            let winLines = game.serverData.setWonLines;
-            if ( Object.keys( winLines ).length > 0 ) { // если есть выигрышные линии
+                // Проверить наличие выигрышных линий
 
-                // Запустить показ выигрышных линий
+                let winLines = game.serverData.setWonLines;
+                if ( Object.keys( winLines ).length > 0 ) { // если есть выигрышные линии
 
-                game.setState( Game.State.SHOW_WIN_LINES );
-                game.lineBox.startShowWinLines( winLines );
-            }
-            else if ( game.isBonusProcess ) {           // в процессе бонус-игры
+                    // Запустить показ выигрышных линий
 
-                if ( game.isBonusStarted() ) {                 // выпал бонус в бонусе
-
-                    // Показать баннер дополнительных бесплатных спинов в бонус-игре
-                    // и потом показать дополнительные выигрыши
-
-                    game.showFreeSpinBanner( game.startShowExtraBonus );
+                    game.setState( Game.State.SHOW_WIN_LINES );
+                    game.lineBox.startShowWinLines( winLines );
                 }
                 else {
 
-                    // Показать дополнительные выигрыши в бонус-игре
+                    // Перейти к следующему раунду игры
 
-                    game.startShowExtraBonus();
+                    game.startSlot();
                 }
             }
-            else {
+            else {                          // в процессе бонус-игры
 
-                Log.out( 'Goto start slot' );
-                game.startSlot();
+                // Начать анимацию спина в бонус-игре
+
+                game.beginBonusSpinAnimation();
             }
         }
         else {                      // ситуация возможна при ошибке!
@@ -2125,7 +2115,6 @@ class Game extends GameItem {
             if ( ! game.isBonusProcess && game.isAutoPlay() ) {
                 game.toggleAutoPlay();
             }
-//            game.startSlot();
         }
     }
 
@@ -2267,15 +2256,15 @@ class Game extends GameItem {
             if ( game.isBonusStarted() ) {                 // выпал бонус в бонусе
 
                 // Показать баннер дополнительных бесплатных спинов в бонус-игре
-                // и потом показать дополнительные выигрыши
+                // и потом перейти к следующему раунду бонус-игры
 
-                game.showFreeSpinBanner( game.startShowExtraBonus );
+                game.showFreeSpinBanner( ()=>{ game.bonusNextRound() } );
             }
             else {
 
-                // Показать дополнительные выигрыши в бонус-игре
+                // Перейти к следующему раунду бонус-игры
 
-                game.startShowExtraBonus();
+                game.bonusNextRound();
             }
         }
         else if ( game.isBonusStarted() ) {    // в обычной игре выпала бонус-игра
@@ -2537,9 +2526,7 @@ class Game extends GameItem {
                 this.afterRiskImagesDownloaded();
             }
         });
-
     }
-
 
     /**
      * Начать риск-игру.
@@ -2864,6 +2851,8 @@ class Game extends GameItem {
         this.freeSpinNum = 0;
         this.startBannerFinished = false;
 
+        this.boatArray = [];
+
         // Проверить загрузку файлов для бонус-игры.
 
         if ( ! this.isBonusFilesLoaded ) {
@@ -2993,132 +2982,279 @@ class Game extends GameItem {
     startBonusRotate() {
 
         // Закрываем стартовый баннер
+
         this.textBanner.hide();
+        this.controlItem('start').setEnabled( false );
 
-        // Включаем фоновую музыку
-        this.playLoop( 'background2' );
+        // Запускаем анимацию лодки, отплывающей от корабля
 
-        // Запускаем вращение
-        this.startRotate();
+        this.animateSailingBoat( () => {    // по окончании анимации
+
+            // Включаем фоновую музыку
+            this.playLoop( 'origin/feature_background' );
+
+            // Запускаем вращение
+            this.startRotate();
+
+            // Запускаем движение всех лодок
+            this.startMovingBoats();
+        } );
     }
 
     /**
-     * Показать дополнительные выигрыши в бонус-игре.
+     * Начать анимацию спина в бонус-игре.
      */
-    startShowExtraBonus() {
-        let game = Game.instance();
-        let bonusGame = game.serverData.bonusGame;
-        Log.out( 'Start show extra bonus win: ' + JSON.stringify( bonusGame ) );
-        if ( bonusGame && bonusGame.setBonusReel && bonusGame.setBonusReel.length > 0 ) {  // есть линии по символу расширения
+    beginBonusSpinAnimation() {
 
-            // Показать выигрышные линии с символом-расширителем.
-            // bonusGame.setBonusReel - массив номеров барабанов (от 1 до 5), в которых есть символ-расширитель
-            // bonusGame.setWonLines - список выигрышных линий с суммами, как при обычной игре: { line: { число_символов, сумма_выигрыша }, ... }
+        // Показать атаку акулы на лодку
 
-            game.reelBox.setEnabled( false );
-            game.setState( Game.State.DISABLED );
-            game.lineBox.startShowExtraLines( {
-                symbol: game.specSymbol,
-                reels:  bonusGame.setBonusReel,
-                winLines: bonusGame.setWonLines
-            });
-        }
-        else {
+        if ( ! this.startSharkAnimation() ) {   // нет акулы
 
-            game.bonusNextRound();
+            // Показать лодку, отплывающую от корабля в 1-ом барабане.
+            // По окончании анимации или если корабля нет - собрать выигрыши
+            // из сундуков
+
+            if ( ! this.animateSailingBoat( ()=>{ this.сollectChestWins(); } ) ) {
+                this.сollectChestWins();
+            }
         }
     }
 
     /**
-     * Начало показа линий по символу расширения.
-     */
-    onExtraLinesShowStarted() {
-        Game.instance().setState( Game.State.SHOW_EXTRA_LINES );
-    }
-
-    /**
-     * Обработка показа одной линии по символу расширения.
+     * Найти акулу в позиции лодки и запустить анимацию.
      *
-     * @param {object} params параметры вызова:
-     * 'line' - номер выигрышной линии в символьном виде
-     * 'win' - массив из двух элементов:
-     *      0 - число выигрышных символов в линии
-     *      1 - сумма выигрыша по линии
+     * @return {boolean} Возвращает true, если есть акула в позиции движущейся лодки
+     * и запущена анимация. Иначе возвращает false.
      */
-    onExtraLineShown( params ) {
+    startSharkAnimation() {
+        let sharkSymbol = this.symbols.scatter.shark;
+        let symbols = this.serverData["setSymbols"];
+        let boatCnt = this.boatArray.length;
+        for ( let i = 0; i < boatCnt; ++i ) {
+            let boat = this.boatArray[ i ];
+            let reelNo = boat.currentReel;  // индекс барабана, в котором находится лодка
+            if ( reelNo <= 4 ) {
+                let symIndex = boat.symbolIndex;
+                if ( symbols[ reelNo ][ symIndex ] === sharkSymbol ) {  // акула в позиции лодки
 
-        Log.out( 'Show extra line: ' + JSON.stringify( params ) );
+                    // Удалить лодку
+                    boat.destroy();
+                    this.boatArray.splice(i,1);
 
-        let game = Game.instance();
-        let winSymCount = params.win[ 0 ];
-        let winAmount = params.win[ 1 ];
-
-        // Определить звуковой файл для проигрывания музыки
-
-        let soundFile;
-        let symbolId = game.specSymbol;
-        if ( symbolId === 7 ) {         // мумия фараона
-            soundFile = "mummy_3_extra";
-        }
-        else if ( symbolId === 8 ) {    // скарабей
-            soundFile = "scarab_3";
-        }
-        else if ( symbolId === 9 ) {    // статуя изиды
-            soundFile = "statue_3";
-        }
-        else if ( symbolId === 10 ) {   // мужик
-            soundFile = "person_3";
-        }
-
-        if ( ! soundFile ) {
-            if ( winSymCount === 5 ) { // если выпало 5 одинаковых символов
-                soundFile = "winring_10steps";
-            }
-            else {
-                let lineBet = game.selectedBet;
-                if ( winAmount <= lineBet * 10 ) {
-                    soundFile = "win5";
-                }
-                else if ( winAmount <= lineBet * 25 ) {
-                    soundFile = "win10";
-                }
-                else {
-                    soundFile = "win25";
+                    // Показать нападение акулы
+                    this.animateSharkAttack( reelNo, symIndex );
+                    return true;
                 }
             }
         }
-        let lineBox = game.lineBox;
-        if ( soundFile ) {
-            // Проиграть звук комбинации символов
-            game.currentWinLineSound = soundFile;
-            game.startPlay( soundFile, lineBox.onNextExtraLine, { self: lineBox } );
-        }
-        else {
-            // Если не задан звук - просто пауза
-            game.currentWinLineSound = '';
-            setTimeout( lineBox.onNextExtraLine, LineBox.EXTRA_LINE_INTERVAL, { self: lineBox } );
-        }
-
-        // Подсчитать выигрыш по спину и показать общий выигрыш и выигрыш по спину
-
-        game.spinWinAmount += winAmount;
-        game.showMsgAbove( Tools.formatAmount( game.spinWinAmount ) + " WIN", true );
+        return false;
     }
 
     /**
-     * Обработка завершения показа всех линий по символу расширения.
+     * Объект анимации акулы, нападающей на лодку.
+     * @type AnimatedItem
      */
-    onExtraLinesShowFinished() {
-        let game = Game.instance();
+    sharkAttack;
 
-        // Остановить показ линий по символу расширения
+    /**
+     * Показать анимацию акулы, нападающей на лодку.
+     *
+     * @param {type} reelNo
+     * @param {type} symIndex
+     */
 
-        game.lineBox.stopShowExtraLines();
-        game.reelBox.setEnabled( true );
+    animateSharkAttack( reelNo, symIndex ) {
 
-        // Перейти к следующему раунду бонус-игры
+        Log.out( 'Animate shark attack in reel ' + reelNo + ' slot ' + symIndex );
 
-        game.bonusNextRound();
+        let options = Tools.clone( this.bonusDef.sharkAttack );
+
+        let reelPos = this.reelDef.pos;
+        options.vertical.x = reelPos.vertical[ reelNo ].x;
+        options.vertical.y += options.vertical.height * symIndex;
+
+        options.horizontal.x = reelPos.horizontal[ reelNo ].x;
+        options.horizontal.y += options.horizontal.height * symIndex;
+
+        // Создать объект анимации акулы
+        this.sharkAttack = new AnimatedItem( this, options );
+        this.sharkAttack.addListener( 'animationStopped', ()=>{ // по окончании анимации
+
+            setTimeout( ()=>{
+
+                // Удалить текущую анимацию
+
+                this.sharkAttack.setVisible( false );
+                delete this.sharkAttack;
+                this.sharkAttack = null;
+
+                // Повторить анимацию спина бонус-игры
+
+                this.beginBonusSpinAnimation();
+            }, 100 );
+
+        });
+
+        // Запустить анимацию
+        this.startPlay( 'origin/event_sharkattack' );
+        this.sharkAttack.start();
+    }
+
+    /**
+     * Массив движущихся лодок.
+     */
+    boatArray;
+
+    /**
+     * Создать новую движущуюся лодку.
+     *
+     * @param {int} index номер позиции на барабане от 0 до 2
+     *
+     * @return {object}
+     */
+
+    createMovingBoat( index ) {
+
+        Log.out( 'Create moving boat in slot ' + index );
+
+        let options = Tools.clone( this.bonusDef.movingBoat );
+
+        options.vertical.y += options.vertical.height * index;
+        options.horizontal.y += options.horizontal.height * index;
+
+        let boat = new MovingBoat( this, options, index );
+        boat.addListener( 'movingStopped', ()=>{    // по окончании движения
+
+            Log.warn( 'Moving boat sopped. ' );
+
+            // Удалить лодку, если она вышла за последний барабан
+
+            if ( boat.currentReel > 4 ) {
+                let index = this.boatArray.indexOf( boat );
+                if ( index >= 0 ) {
+                    boat.destroy();
+                    this.boatArray.splice( index, 1 );
+                }
+            }
+        });
+        this.boatArray.push( boat );
+
+        return boat;
+    }
+
+    /**
+     * Объект анимации лодки, отплывающей от корабля.
+     * @type AnimatedItem
+     */
+    sailingBoat;
+
+    /**
+     * Запуск анимации лодки, отплывающей от корабля, на 1-ом барабане.
+     *
+     * @return {boolean} Возвращает true, если символ для анимации найден,
+     * и анимация запущена. Иначе возвращает false.
+     */
+    animateSailingBoat( callback ) {
+        let reel = this.reelBox.reel( 0 );
+        let stoppedSymbols = reel.stoppedSymbols;
+        let boatSymbol = this.bonusDef.sailingBoat.symbol;
+        for ( let i = 0; i < 3; ++i ) {
+            if ( stoppedSymbols[ i ] == boatSymbol ) {
+
+                Log.out( 'Animate sailing boat in slot ' + i );
+
+                let options = Tools.clone( this.bonusDef.sailingBoat );
+                options.vertical.y += options.vertical.height * i;
+                options.horizontal.y += options.horizontal.height * i;
+
+                // Создать анимацию лодки
+                this.sailingBoat = new AnimatedItem( this, options );
+                this.sailingBoat.addListener( 'animationStopped', ()=>{ // по окончании анимации
+
+                    // Создать движущуюся лодку
+                    this.createMovingBoat( i );
+
+                    // Удалить анимацию
+                    setTimeout( ()=>{
+                        this.sailingBoat.setVisible( false );
+                        delete this.sailingBoat;
+                        this.sailingBoat = null;
+                        callback();
+                    }, 100 );
+                });
+
+                // Запустить анимацию
+                this.startPlay( 'origin/event_shipnewboat' );
+                this.sailingBoat.start();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Показать все движущиеся лодки.
+     */
+    showMovingBoats() {
+        let boatCnt = this.boatArray.length;
+        for ( var i = 0; i < boatCnt; ++i ) {
+            var boat = this.boatArray[ i ];
+            boat.setVisible( true );
+        }
+    }
+
+    /**
+     * Запустить движение всех движущихся лодок.
+     */
+    startMovingBoats() {
+        let boatCnt = this.boatArray.length;
+        if ( boatCnt > 0 ) {
+            console.log( 'Start ' + boatCnt + ' boat(s) moving ...');
+            for ( var i = 0; i < boatCnt; ++i ) {
+                var boat = this.boatArray[ i ];
+                boat.currentReel += 1;
+                boat.showManInBoat();
+                boat.startMoving();
+            }
+        }
+    }
+
+    /**
+     * Спрятать все движущиеся лодки.
+     */
+    hideMovingBoats() {
+        let boatCnt = this.boatArray.length;
+        for ( var i = 0; i < boatCnt; ++i ) {
+            var boat = this.boatArray[ i ];
+            boat.setVisible( false );
+        }
+    }
+
+    сollectChestWins() {
+
+        // TODO: подготовить и показать сбор выигрышей с сундуков
+
+
+        // Спрятать все движущиеся лодки
+
+        this.hideMovingBoats();
+
+        // Проверить наличие выигрышных линий
+
+        let winLines = this.serverData.setWonLines;
+        if ( Object.keys( winLines ).length > 0 ) { // если есть выигрышные линии
+
+            // Запустить показ обычных выигрышных линий
+
+            this.setState( Game.State.SHOW_WIN_LINES );
+            this.lineBox.startShowWinLines( winLines );
+        }
+        else {
+
+            // Перейти к следующему раунду игры
+
+            this.bonusNextRound();
+        }
     }
 
     /**
@@ -3141,6 +3277,7 @@ class Game extends GameItem {
             setTimeout( game.onBonusGameFinished, Game.DELAY_BONUS_SPIN );
         }
         else {
+            game.startMovingBoats();
             setTimeout( ()=>{ game.startSlot() }, Game.DELAY_BONUS_SPIN );
         }
     }
@@ -3155,7 +3292,7 @@ class Game extends GameItem {
         game.setState( Game.State.BONUS_FINISH );
 
         game.lineBox.stopShowWinLines();
-        game.stopPlay( 'background2' );
+        game.stopPlay( 'origin/feature_background' );
 
         // Показать баннер завершения бонус-игры
         let text = "Feature Win\n" + Tools.formatAmount( game.totalWinAmount ) + "\n"

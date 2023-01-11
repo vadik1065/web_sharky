@@ -164,6 +164,10 @@ class Reel extends GameItem {
         }
     }
 
+    scale() {
+        return Tools.clone( Game.instance().scale() );
+    }
+    
     size() {
         let game = Game.instance();
         let symbolSize = game.isVertical() ? game.symbols.size.vertical : game.symbols.size.horizontal;
