@@ -9,8 +9,6 @@ class MovingBoat extends AnimatedItem {
     currentReel;        // номер текущего барабана (от 0 до 4)
     symbolIndex;        // индекс символа на барабане (от 0 до 2)
 
-    savedDistance;
-
     constructor( parent, options, index ) {
 
         super( parent, options );
@@ -35,36 +33,38 @@ class MovingBoat extends AnimatedItem {
         this.options.sprite.url = this.options.manInBoat;
         this.options.sprite.count = 4;
         this.update();
-        if ( this.savedDistance > 0 ) this.distance = this.savedDistance;
-        this.start();
+        this.setVisible( true );
     }
 
-    originalV;
-    originalH;
+    targetPosV;
+    targetPosH;
     moveStepV;  // щаг движения для вертикальной ориентации окна
     moveStepH;  // щаг движения для горизонтальной ориентации окна
     moveTimer;
 
     startMoving() {
-        this.originalV = this.options.vertical.x;
-        this.originalH = this.options.horizontal.x;
+        this.start();
+        this.targetPosV = this.options.vertical.x + this.options.vertical.distance;
+        this.targetPosH = this.options.horizontal.x + this.options.horizontal.distance;
         this.moveStepV = this.options.vertical.distance / MovingBoat.MOVE_TIME;
         this.moveStepH = this.options.horizontal.distance / MovingBoat.MOVE_TIME;
         let moveTimer = setInterval( ()=>{
             this.options.vertical.x += this.moveStepV;
             this.options.horizontal.x += this.moveStepH;
             if ( Game.instance().isVertical() ) {
-                if ( this.options.vertical.x >= this.originalV + this.options.vertical.distance ) {
+                if ( this.options.vertical.x >= this.targetPosV ) {
                     clearInterval( moveTimer );
                     this.stop();
                     this.emit( 'movingStopped' );
+                    return;
                 }
             }
             else {
-                if ( this.options.horizontal.x >= this.originalH + this.options.horizontal.distance ) {
+                if ( this.options.horizontal.x >= this.targetPosH ) {
                     clearInterval( moveTimer );
                     this.stop();
                     this.emit( 'movingStopped' );
+                    return;
                 }
             }
             this.draw();

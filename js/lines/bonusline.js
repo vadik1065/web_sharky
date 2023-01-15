@@ -67,9 +67,10 @@ class BonusLine extends GameItem {
             this.winAmount = winData[ 1 ];
             this.winObjects = [];
 
+            let slot = this.scatterPos( 0, Game.instance().isBonusProcess ? this.options.bonus : this.options.first );
             let box = new WinBox( this, {
                 reel: 0,
-                pos: this.scatterPos( 0, this.options.first ),
+                pos: slot,
                 color: this.options.color,
                 amount: this.winAmount
             });

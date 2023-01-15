@@ -23,9 +23,13 @@ class AnimatedItem extends GameItem {
      */
     options;
 
+    onFrameChanged;
+
     constructor( parent, options ) {
 
         super( parent );
+
+        this.onFrameChanged = null;
 
         this.options = Tools.clone( options );
         this.update();
@@ -69,12 +73,18 @@ class AnimatedItem extends GameItem {
         this.pixiObj.addChild( this.imageSprite );
         this.imageSprite.visible = false;
 
-        Log.out( 'Total book frames: ' + this.imageSprite.totalFrames );
+        Log.out( 'Total animation frames: ' + this.imageSprite.totalFrames );
 
         this.imageSprite.animationSpeed = ( this.options.speed ) ? this.options.speed : 0.2;
-        this.imageSprite.loop = spriteDef.loop;
+        this.imageSprite.loop = spriteDef.loop ? spriteDef.loop : false;
+
         this.imageSprite.onComplete = ()=>{
             this.emit( 'animationStopped' );
+        };
+        this.imageSprite.onFrameChange = ( frameIndex )=>{
+            if ( this.onFrameChanged != null ) {
+                this.onFrameChanged( frameIndex );
+            }
         };
     }
 
@@ -112,7 +122,7 @@ class AnimatedItem extends GameItem {
 
     draw() {
         let game = Game.instance();
-        let scale = this.parent.scale();
+        let scale = this.scale();
         let parentPos = this.parent.pos();
 
         let options = ( this.options.vertical != undefined )

@@ -31,6 +31,9 @@ class WinSymbol extends GameItem {
         let speed = 0;
         let textures = [];
         let info = game.symbols.info[ symbol ];
+        if ( ! info ) {
+            Log.error( 'Undefined symbol information: ' + symbol );
+        }
         let def = reelBox.bonusSymbols ? info.bonus : info.normal;
         if ( def.sprite || def.bonus ) {    // задан спрайт
             let spriteData = ( game.isBonusStarted() && def.bonus ) ? def.bonus : def.sprite;

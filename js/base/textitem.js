@@ -42,23 +42,7 @@ class TextItem extends GameItem {
 
         super( parent );
 
-        this.options = Tools.clone( options );
-        let textStyle = {
-            fontFamily : ( options.fontFamily != undefined ) ? options.fontFamily : 'Arial',
-            fontSize: ( options.fontSize != undefined ) ? options.fontSize : TextItem.DEFAULT_FONT_SIZE,
-            fontWeight: ( options.fontWeight != undefined ) ? options.fontWeight : 'normal',
-            fill: ( options.color != undefined ) ? options.color : 0xFFFFFF
-        };
-        if ( this.options.shadow ) {
-            let sh = this.options.shadow;
-            textStyle.dropShadow = true;
-            textStyle.dropShadowAlpha = ( sh.alpha != undefined ) ? sh.alpha : 1;
-            textStyle.dropShadowAngle = ( sh.angle != undefined ) ? sh.angle : Math.PI/6;
-            textStyle.dropShadowBlur  = ( sh.blur != undefined )  ? sh.blur : 0;
-            textStyle.dropShadowColor = ( sh.color != undefined ) ? sh.color : 0;
-            textStyle.dropShadowDistance = ( sh.distance != undefined ) ? sh.distance : 5;
-        }
-        this.textStyle = textStyle;
+        this.updateOptions( options );
         this.parseText( text );
     }
 
@@ -82,6 +66,26 @@ class TextItem extends GameItem {
             let pixiText = this.pixiObj.children[ i ];
             pixiText.text = lines [ i ];
         }
+    }
+
+    updateOptions( options ) {
+        this.options = Tools.clone( options );
+        let textStyle = {
+            fontFamily : ( options.fontFamily != undefined ) ? options.fontFamily : 'Arial',
+            fontSize: ( options.fontSize != undefined ) ? options.fontSize : TextItem.DEFAULT_FONT_SIZE,
+            fontWeight: ( options.fontWeight != undefined ) ? options.fontWeight : 'normal',
+            fill: ( options.color != undefined ) ? options.color : 0xFFFFFF
+        };
+        if ( this.options.shadow ) {
+            let sh = this.options.shadow;
+            textStyle.dropShadow = true;
+            textStyle.dropShadowAlpha = ( sh.alpha != undefined ) ? sh.alpha : 1;
+            textStyle.dropShadowAngle = ( sh.angle != undefined ) ? sh.angle : Math.PI/6;
+            textStyle.dropShadowBlur  = ( sh.blur != undefined )  ? sh.blur : 0;
+            textStyle.dropShadowColor = ( sh.color != undefined ) ? sh.color : 0;
+            textStyle.dropShadowDistance = ( sh.distance != undefined ) ? sh.distance : 5;
+        }
+        this.textStyle = textStyle;
     }
 
     updateText( text ) {

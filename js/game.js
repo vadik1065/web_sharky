@@ -1846,7 +1846,7 @@ class Game extends GameItem {
         else if ( game.state == Game.State.BONUS_FINISH ) {         // при показе завершающего баннера бонус-игры
 
             // Выключаем бонус-режим
-            game.stopPlay( "banner" );
+            game.stopPlay( "origin/feature_end_long" );
             game.setBonusGameUI( false );
         }
         else if ( game.state == Game.State.SHOW_JACKPOT ) {         // при показе выигрыша джекпота
@@ -3006,16 +3006,18 @@ class Game extends GameItem {
      */
     beginBonusSpinAnimation() {
 
+        this.swimmerArray = [];
+
         // Показать атаку акулы на лодку
 
         if ( ! this.startSharkAnimation() ) {   // нет акулы
 
             // Показать лодку, отплывающую от корабля в 1-ом барабане.
-            // По окончании анимации или если корабля нет - собрать выигрыши
-            // из сундуков
+            // По окончании анимации или если корабля нет - подготовить и запустить
+            // пловцов за сундуками
 
-            if ( ! this.animateSailingBoat( ()=>{ this.сollectChestWins(); } ) ) {
-                this.сollectChestWins();
+            if ( ! this.animateSailingBoat( ()=>{ this.prepareSwimmers(); } ) ) {
+                this.prepareSwimmers();
             }
         }
     }
@@ -3071,10 +3073,10 @@ class Game extends GameItem {
 
         let reelPos = this.reelDef.pos;
         options.vertical.x = reelPos.vertical[ reelNo ].x;
-        options.vertical.y += options.vertical.height * symIndex;
+        options.vertical.y = reelPos.vertical[ reelNo ].y + options.vertical.height * symIndex;
 
         options.horizontal.x = reelPos.horizontal[ reelNo ].x;
-        options.horizontal.y += options.horizontal.height * symIndex;
+        options.horizontal.y = reelPos.horizontal[ reelNo ].y + options.horizontal.height * symIndex;
 
         // Создать объект анимации акулы
         this.sharkAttack = new AnimatedItem( this, options );
@@ -3230,10 +3232,167 @@ class Game extends GameItem {
         }
     }
 
-    сollectChestWins() {
+    /**
+     * Массив пловцов за сундуками.
+     */
+    swimmerArray;
 
-        // TODO: подготовить и показать сбор выигрышей с сундуков
+    /**
+     * Индекс последней лодки, собравшей выигрышы из сундуков.
+     */
+    lastBoatIndex;
 
+    /**
+     * Подготовить пловцов за сундуками.
+     */
+    prepareSwimmers() {
+
+        let boatCnt = this.boatArray.length;            // число лодочников
+        let chestWin = this.serverData.bonusGame.bonusWin;
+        let chestCnt = chestWin ? chestWin.length : 0;  // число сундуков
+
+        Log.out( 'Prepare swimmers: boatCnt = ' + boatCnt + ', chestCht = ' + chestCnt );
+
+        if ( boatCnt > 0 && chestCnt > 0 ) {
+
+            for ( let i = 0; i < boatCnt; ++i ) {   // цикл по всем лодкам
+
+                var boat = this.boatArray[i];
+                var boatPos = boat.symbolIndex;         // позиция лодки на барабане
+                var boatReel = boat.currentReel;        // индекс барабана лодки
+
+                for ( let j = 0; j < chestCnt; ++j ) {  // цикл по всем сундукам
+
+                    var chest = chestWin[ j ];
+                    var chestPos = chest[ 0 ] - 1;          // позиция сундука на барабане
+                    var chestReel = chest[ 1 ] - 1;         // индекс барабана сундука
+
+                    // Определить положение сундука относительно лодки
+
+                    let direction = '';
+                    if ( chestReel == boatReel && chestPos == boatPos ) {           // сундук в позиции лодки
+                        direction = 'here';
+                    }
+                    else if ( chestReel == boatReel-1 && chestPos == boatPos ) {    // сундук слева
+                        direction = 'left';
+                    }
+                    else if ( chestReel == boatReel-1 && chestPos == boatPos-1 ) {  // сундук слева-вверху
+                        direction = 'left-up';
+                    }
+                    else if ( chestReel == boatReel && chestPos == boatPos-1 ) {    // сундук сверху
+                        direction = 'up';
+                    }
+                    else if ( chestReel == boatReel+1 && chestPos == boatPos-1 ) {  // сундук сверху-справа
+                        direction = 'right-up';
+                    }
+                    else if ( chestReel == boatReel+1 && chestPos == boatPos ) {    // сундук справа
+                        direction = 'right';
+                    }
+                    else if ( chestReel == boatReel+1 && chestPos == boatPos+1 ) {  // сундук справа-снизу
+                        direction = 'right-down';
+                    }
+                    else if ( chestReel == boatReel && chestPos == boatPos+1 ) {    // сундук снизу
+                        direction = 'down';
+                    }
+                    else if ( chestReel == boatReel-1 && chestPos == boatPos+1 ) {  // сундук снизу-слева
+                        direction = 'left-down';
+                    }
+
+                    // Создать пловца, если есть сундук в окрестности лодки
+
+                    if ( direction != '' ) {
+                        Log.out( 'Create swimmer in reel ' + boatReel + ', pos ' + boatPos + ', direction ' + direction );
+                        let params = {
+                            boatIndex: i,
+                            reelIndex: boatReel,
+                            slotIndex: boatPos,
+                            direction: direction,
+                            amount: chest[ 2 ]
+                        };
+                        let swimmer = new Swimmer( this, this.bonusDef.swimmer, params );
+                        this.swimmerArray.push( swimmer );
+                    }
+                }
+            }
+        }
+
+        // Запустить сбор бонусов из сундуков
+
+        this.lastBoatIndex = -1;
+        this.collectChestWins();
+    }
+
+    /**
+     * Собрать выигрыши с сундуков.
+     */
+    collectChestWins() {
+
+        if ( this.swimmerArray.length > 0 ) {   // есть еще пловцы
+
+            // Запустить анимацию очередного выигрыша
+
+            let swimmer = this.swimmerArray[0];
+
+            if ( swimmer.params.boatIndex !== this.lastBoatIndex ) {
+
+                if ( this.lastBoatIndex >= 0 ) {     // показать человека в лодке
+                    this.boatArray[ this.lastBoatIndex ].showManInBoat();
+                }
+
+                this.lastBoatIndex = swimmer.params.boatIndex;
+                let boat = this.boatArray[ this.lastBoatIndex ];
+                if ( swimmer.params.chestDirection == 'here' ) {
+                    // при анимации сундука в позиции лодки - спрятать лодку
+                    boat.setVisible( false );
+                }
+                else {
+                    // при анимации пловца - показать пустую лодку
+                    boat.showEmptyBoat();
+                }
+            }
+
+            // Добавить бонус из сундука к сумме выигрыша по спину
+
+            swimmer.addListener( 'bonusReceived', (params)=>{
+                this.spinWinAmount += params.amount;
+                this.showMsgAbove( Tools.formatAmount( this.spinWinAmount ) + " WIN", true );
+            });
+
+            // По окончании движения пловца, удалить его и запустить движение другого пловца
+
+            swimmer.addListener( 'swimmerStopped', ()=>{
+                this.swimmerArray.splice( 0, 1 );
+                swimmer.destroy();
+                setTimeout( ()=>{ this.collectChestWins(); }, 100 );
+            });
+
+            // Запустить анимацию пловца
+
+            swimmer.start();
+            return;
+        }
+
+        // В позициях всех лодочников заменить символы на мужика в лодке
+
+        var boatCnt = this.boatArray.length;
+        if ( boatCnt > 0 ) {
+            let mainInBoat = this.symbols.scatter.manInBoat;
+            for ( var i = 0; i < boatCnt; ++i ) {
+                var boat = this.boatArray[ i ];
+                var reelIndex = boat.currentReel;
+                var symIndex = boat.symbolIndex;
+                this.serverData.setSymbols[ reelIndex ][ symIndex ] = mainInBoat;
+            }
+            this.reelBox.setSymbols( this.serverData.setSymbols );
+            this.reelBox.setStoppedSymbols( this.serverData.setSymbols );
+        }
+
+        // Показать человека в лодке
+
+        if ( this.lastBoatIndex >= 0 ) {
+            this.boatArray[ this.lastBoatIndex ].showManInBoat();
+            this.lastBoatIndex = -1;
+        }
 
         // Спрятать все движущиеся лодки
 

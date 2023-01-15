@@ -56,6 +56,7 @@ class LineBox extends GameItem {
         this.bonusLine = new BonusLine( this, {
             first: game.symbols.scatter.first,
             last: game.symbols.scatter.last,
+            bonus: game.symbols.scatter.manInBoat,
             color: game.symbols.scatter.color,
         });
     }
