@@ -241,11 +241,11 @@ class Swimmer extends AnimatedItem {
             speed: 0.2
         };
 
-        this.options.vertical.x = reelPos.vertical[ reelIndex ].x - ( this.options.vertical.width - symbolSize.vertical.width ) / 2
+        this.options.vertical.x = reelPos.vertical[ reelIndex ].x - ( this.options.vertical.width - symbolSize.vertical.width ) / 2;
         this.options.vertical.y = reelPos.vertical[ reelIndex ].y + symbolSize.vertical.height * slotIndex
                         - ( spriteInfo.height * this.options.vertical.width / spriteInfo.width - symbolSize.vertical.height ) / 2;
 
-        this.options.horizontal.x = reelPos.horizontal[ reelIndex ].x - ( this.options.horizontal.width - symbolSize.horizontal.width ) / 2
+        this.options.horizontal.x = reelPos.horizontal[ reelIndex ].x - ( this.options.horizontal.width - symbolSize.horizontal.width ) / 2;
         this.options.horizontal.y = reelPos.horizontal[ reelIndex ].y + symbolSize.horizontal.height * slotIndex
                         - ( spriteInfo.height * this.options.horizontal.width / spriteInfo.width - symbolSize.horizontal.height ) / 2;
 

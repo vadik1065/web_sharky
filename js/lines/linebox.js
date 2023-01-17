@@ -64,7 +64,7 @@ class LineBox extends GameItem {
     scale() {
         return this.parent.scale();
     }
-0
+
     /**
      * Выбрать заданное число линий.
      */
