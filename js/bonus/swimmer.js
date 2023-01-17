@@ -29,6 +29,12 @@ class Swimmer extends AnimatedItem {
 
     textOptions;
 
+    state;
+
+    static MOVE_TO_CHEST = 0;
+    static OPEN_CHEST = 1;
+    static MOVE_BACK = 2;
+
     constructor( parent, options, params ) {
 
         let spriteInfo = Tools.clone( options[ params.direction ] );
@@ -36,41 +42,27 @@ class Swimmer extends AnimatedItem {
         let game = Game.instance();
         let reelPos = game.reelDef.pos;
         let symbolSize = game.symbols.size;
-        let scale = symbolSize.vertical.width / symbolSize.horizontal.width;
 
         let opt = {
             vertical: options.vertical,
             horizontal: options.horizontal,
-            sprite: spriteInfo
+            sprite: spriteInfo,
+            speed: 0.2
         };
-        opt.vertical.x = reelPos.vertical[ params.reelIndex ].x - ( spriteInfo.width * scale - symbolSize.vertical.width ) / 2;
-        opt.vertical.y = reelPos.vertical[ params.reelIndex ].y + symbolSize.vertical.height * params.slotIndex - ( spriteInfo.height * scale - symbolSize.vertical.height ) / 2;
+        opt.vertical.x = reelPos.vertical[ params.reelIndex ].x - ( options.vertical.width - symbolSize.vertical.width ) / 2;
+        opt.vertical.y = reelPos.vertical[ params.reelIndex ].y + symbolSize.vertical.height * params.slotIndex
+                        - ( spriteInfo.height * options.vertical.width / spriteInfo.width - symbolSize.vertical.height ) / 2;
 
-        opt.horizontal.x = reelPos.horizontal[ params.reelIndex ].x - ( spriteInfo.width - symbolSize.horizontal.width ) / 2;
-        opt.horizontal.y = reelPos.horizontal[ params.reelIndex ].y + symbolSize.horizontal.height * params.slotIndex - ( spriteInfo.height - symbolSize.horizontal.height ) / 2;
+        opt.horizontal.x = reelPos.horizontal[ params.reelIndex ].x - ( options.horizontal.width - symbolSize.horizontal.width ) / 2;
+        opt.horizontal.y = reelPos.horizontal[ params.reelIndex ].y + symbolSize.horizontal.height * params.slotIndex
+                        - ( spriteInfo.height * options.horizontal.width / spriteInfo.width - symbolSize.horizontal.height ) / 2;
 
-        Log.out( 'Swimmer options: ' + JSON.stringify( opt ) );
         super( parent, opt );
 
         this.swimmerOptions = Tools.clone( options );
         this.params = Tools.clone( params );
 
         this.setVisible( false );
-    }
-
-    /**
-     * Текущий масштаб.
-     * Для вертикального режима используются дополнительные множители.
-     */
-    scale() {
-        let scale = Tools.clone( this.parent.scale() );
-//        let game = Game.instance();
-//        if ( game.isVertical() ) {
-//            let bkgOptions = game.bonusDef.bkg;
-//            scale.x *= bkgOptions.vertical.width / bkgOptions.horizontal.width;
-//            scale.y *= bkgOptions.vertical.height / bkgOptions.horizontal.height;
-//        }
-        return scale;
     }
 
     targetV;
@@ -82,6 +74,8 @@ class Swimmer extends AnimatedItem {
      * Начать анимацию движения из исходного положения.
      */
     start() {
+
+        this.state = Swimmer.MOVE_TO_CHEST;
 
         let distanceV = {
             x: this.options.sprite.reel * this.swimmerOptions.vertical.reelOffset,
@@ -159,6 +153,8 @@ class Swimmer extends AnimatedItem {
      */
     animateChest() {
 
+        this.state = Swimmer.OPEN_CHEST;
+
         this.onFrameChanged = ( currentFrame ) => {
             if ( currentFrame == 5 ) {         // показать сумму выигрыша
                 this.bonusWin.setVisible( true );
@@ -191,7 +187,8 @@ class Swimmer extends AnimatedItem {
                 width: symSize.horizontal.width,
                 height: symSize.horizontal.height
             },
-            sprite: this.swimmerOptions.chest.sprite
+            sprite: this.swimmerOptions.chest.sprite,
+            speed: 0.4
         };
         this.update();
 
@@ -224,9 +221,11 @@ class Swimmer extends AnimatedItem {
 
         this.setVisible( false );
 
+        this.state = Swimmer.MOVE_BACK;
+
         let direction = this.params.direction;              // предыдущее направление
-        let reelIndex = this.params.reelIndex + this.swimmerOptions[ direction ].reel;  // текущий барабан
-        let slotIndex = this.params.slotIndex + this.swimmerOptions[ direction ].slot;  // текущая позиция на барабане
+        let reelIndex = this.params.reelIndex + this.swimmerOptions[ direction ].reel;  // барабан с сундуком
+        let slotIndex = this.params.slotIndex + this.swimmerOptions[ direction ].slot;  // текущая позиция на барабане с сундуком
 
         // Описание обратного направления для возвращения на исходную позицию
         let spriteInfo = this.swimmerOptions[ this.swimmerOptions[ direction ].back ];
@@ -234,18 +233,21 @@ class Swimmer extends AnimatedItem {
         let game = Game.instance();
         let reelPos = game.reelDef.pos;
         let symbolSize = game.symbols.size;
-        let scale = symbolSize.vertical.width / symbolSize.horizontal.width;
 
         this.options = {
             vertical: this.swimmerOptions.vertical,
             horizontal: this.swimmerOptions.horizontal,
-            sprite: spriteInfo
+            sprite: spriteInfo,
+            speed: 0.2
         };
-        this.options.vertical.x = reelPos.vertical[ reelIndex ].x - ( spriteInfo.width * scale - symbolSize.vertical.width ) / 2
-        this.options.vertical.y = reelPos.vertical[ reelIndex ].y + symbolSize.vertical.height * slotIndex - ( spriteInfo.height * scale - symbolSize.vertical.height ) / 2;
-        this.options.horizontal.x = reelPos.horizontal[ reelIndex ].x - ( spriteInfo.width - symbolSize.horizontal.width ) / 2
-        this.options.horizontal.y = reelPos.horizontal[ reelIndex ].y + symbolSize.horizontal.height * slotIndex - ( spriteInfo.height - symbolSize.horizontal.height ) / 2;
-//        Log.out( 'Swimmer back options: ' + JSON.stringify( this.options ) );
+
+        this.options.vertical.x = reelPos.vertical[ reelIndex ].x - ( this.options.vertical.width - symbolSize.vertical.width ) / 2
+        this.options.vertical.y = reelPos.vertical[ reelIndex ].y + symbolSize.vertical.height * slotIndex
+                        - ( spriteInfo.height * this.options.vertical.width / spriteInfo.width - symbolSize.vertical.height ) / 2;
+
+        this.options.horizontal.x = reelPos.horizontal[ reelIndex ].x - ( this.options.horizontal.width - symbolSize.horizontal.width ) / 2
+        this.options.horizontal.y = reelPos.horizontal[ reelIndex ].y + symbolSize.horizontal.height * slotIndex
+                        - ( spriteInfo.height * this.options.horizontal.width / spriteInfo.width - symbolSize.horizontal.height ) / 2;
 
         this.update();
 

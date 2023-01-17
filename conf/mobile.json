@@ -19,10 +19,13 @@
             }
         },
         "scatter": {
-            "id": 3,
             "color": "0xFFFF00",
+            "id": 3,
+            "chest": 4,
             "first": 11,
-            "last": 12
+            "last": 12,
+            "manInBoat": 13,
+            "shark": 14
         },
         "info": {
             "1": {
@@ -141,8 +144,7 @@
                     "url": "./images/game/symbols/11.jpg.webp"
                 },
                 "bonus": {
-                    "url": "./images/game/symbols/11.jpg.webp",
-                    "sprite": { "columns": 8, "count": 66, "width": 100, "height": 100, "url": "./images/game/symbols/win/11.png.webp" }
+                    "url": "./images/game/symbols/11.jpg.webp"
                 }
             },
             "12": {
@@ -476,6 +478,42 @@
             "vertical":   { "x": 185, "y": 140, "width": 600, "height": 360, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "horizontal": { "x": 550, "y": 200, "width": 952, "height": 546, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "text": { "fontName": "Times New Roman", "fontSize": 50, "color": "0xffff00", "lineHeight": 52 }
+        },
+        "sailingBoat": {
+            "symbol": 11,
+            "vertical": { "x": 115, "y": 97, "width": 152, "height": 152 },
+            "horizontal": { "x": 425,  "y": 142, "width": 222, "height": 222 },
+            "sprite": { "columns": 8, "count": 64, "width": 100, "height": 100, "url": "./images/game/bonus/sailing_boat.png.webp" }
+        },
+        "movingBoat": {
+            "vertical": { "x": 76, "y": 97, "width": 229, "height": 152, "distance": 168 },
+            "horizontal": { "x": 369,  "y": 142, "width": 334, "height": 222, "distance": 245 },
+            "manInBoat": "./images/game/bonus/boat_rowing.png.webp",
+            "emptyBoat": "./images/game/bonus/boat_empty.png.webp",
+            "sprite": { "columns": 1, "count": 4, "width": 334, "height": 222, "url": "./images/game/bonus/boat_rowing.png.webp" }
+        },
+        "sharkAttack": {
+            "symbol": 14,
+            "vertical": { "width": 152, "height": 152 },
+            "horizontal": { "width": 222, "height": 222 },
+            "sprite": { "columns": 13, "count": 91, "width": 100, "height": 100, "url": "./images/game/bonus/shark_attack.jpg.webp" }
+        },
+        "swimmer": {
+            "vertical": { "x": 76, "y": 97, "width": 229, "height": 152, "reelOffset": 168, "slotOffset": 152 },
+            "horizontal": { "x": 369,  "y": 142, "width": 334, "height": 222, "reelOffset": 245, "slotOffset": 222 },
+            "here": { "reel": 0, "slot": 0, "back": "here" },
+            "left": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_left.png.webp", "reel": -1, "slot": 0, "back": "right", "loop": true },
+            "left-up": { "columns": 2, "count": 4, "width": 333, "height": 229, "url": "./images/game/bonus/sw_up_left.png.webp", "reel": -1, "slot": -1, "back": "right-down", "loop": true },
+            "up": { "columns": 3, "count": 6, "width": 360, "height": 260, "url": "./images/game/bonus/sw_up.png.webp", "reel": 0, "slot": -1, "back": "down", "loop": true },
+            "right-up": { "columns": 2, "count": 4, "width": 333, "height": 229, "url": "./images/game/bonus/sw_up_right.png.webp", "reel": 1, "slot": -1, "back": "left-down", "loop": true },
+            "right": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_right.png.webp", "reel": 1, "slot": 0, "back": "left", "loop": true },
+            "right-down": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_down_right.png.webp", "reel": 1, "slot": 1, "back": "left-up", "loop": true },
+            "down": { "columns": 2, "count": 4, "width": 417, "height": 250, "url": "./images/game/bonus/sw_down.png.webp", "reel": 0, "slot": 1, "back": "up", "loop": true },
+            "left-down": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_down_left.png.webp", "reel": -1, "slot": 1, "back": "right-up", "loop": true },
+            "chest": {
+                "text": { "color": "0xFFFFFF", "fontSize": 40 },
+                "sprite": { "columns": 8, "count": 40, "width": 100, "height": 100, "url": "./images/game/bonus/chest_swimmer.png.webp" }
+            }
         }
     },
 

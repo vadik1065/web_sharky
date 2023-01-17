@@ -504,7 +504,7 @@
             "here": { "reel": 0, "slot": 0, "back": "here" },
             "left": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_left.png.webp", "reel": -1, "slot": 0, "back": "right", "loop": true },
             "left-up": { "columns": 2, "count": 4, "width": 333, "height": 229, "url": "./images/game/bonus/sw_up_left.png.webp", "reel": -1, "slot": -1, "back": "right-down", "loop": true },
-            "up": { "columns": 3, "count": 6, "width": 208, "height": 260, "url": "./images/game/bonus/sw_up.png.webp", "reel": 0, "slot": -1, "back": "down", "loop": true },
+            "up": { "columns": 3, "count": 6, "width": 360, "height": 260, "url": "./images/game/bonus/sw_up.png.webp", "reel": 0, "slot": -1, "back": "down", "loop": true },
             "right-up": { "columns": 2, "count": 4, "width": 333, "height": 229, "url": "./images/game/bonus/sw_up_right.png.webp", "reel": 1, "slot": -1, "back": "left-down", "loop": true },
             "right": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_right.png.webp", "reel": 1, "slot": 0, "back": "left", "loop": true },
             "right-down": { "columns": 2, "count": 4, "width": 417, "height": 208, "url": "./images/game/bonus/sw_down_right.png.webp", "reel": 1, "slot": 1, "back": "left-up", "loop": true },
