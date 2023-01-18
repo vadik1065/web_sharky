@@ -475,7 +475,7 @@
             "horizontal": { "width": 2048, "height": 1024, "minWidth": 1470, "urls": [ "./images/game/bkg_h.webp" ] }
         },
         "banner": {
-            "vertical":   { "x": 185, "y": 140, "width": 600, "height": 360, "urls": [ "./images/game/bonus/banner.png.webp" ] },
+            "vertical":   { "x": 225, "y": 140, "width": 600, "height": 360, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "horizontal": { "x": 550, "y": 200, "width": 952, "height": 546, "urls": [ "./images/game/bonus/banner.png.webp" ] },
             "text": { "fontName": "Times New Roman", "fontSize": 50, "color": "0xffff00", "lineHeight": 52 }
         },

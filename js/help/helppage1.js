@@ -12,6 +12,62 @@ class HelpPage1 extends ImageItem {
                     x: 620, y: 30, width: 185, height: 123,
                     color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 24
                 }
+            },
+            parrot: {
+                id: 2,
+                options: {
+                    x: 178, y: 190, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            compas: {
+                id: 3,
+                options: {
+                    x: 1038, y: 547, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            chest: {
+                id: 4,
+                options: {
+                    x: 656, y: 218, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            sabers: {
+                id: 5,
+                options: {
+                    x: 912, y: 189, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            k_q: {
+                id: 6,
+                options: {
+                    x: 241, y: 322, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            j_10: {
+                id: 8,
+                options: {
+                    x: 639, y: 375, width: 155, height: 84,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            _9: {
+                id: 9,
+                options: {
+                    x: 940, y: 322, width: 155, height: 115,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
+            },
+            boat: {
+                id: 11,
+                options: {
+                    x: 315, y: 468, width: 120, height: 42,
+                    color: 0xFFFFFF, align: 'centerX', fontName: 'Times New Roman', fontSize: 24, fontWeight: 'bold', lineHeight: 29
+                }
             }
         },
         horizontal: {
