@@ -49,12 +49,10 @@ class AnimatedItem extends GameItem {
 
     update() {
 
-        Log.out( 'AnimationItem: update 1' );
         if ( this.imageSprite ) {
             this.pixiObj.removeChild( this.imageSprite );
         }
 
-        Log.out( 'AnimationItem: update 2' );
         let spriteDef = this.options.sprite;
         let sprite = PIXI.Texture.from( spriteDef.url );
         let pageTextures = [];
@@ -68,12 +66,9 @@ class AnimatedItem extends GameItem {
         }
         this.textures = pageTextures;
 
-        Log.out( 'AnimationItem: update 3' );
         this.imageSprite = new PIXI.AnimatedSprite( this.textures );
         this.pixiObj.addChild( this.imageSprite );
         this.imageSprite.visible = false;
-
-        Log.out( 'Total animation frames: ' + this.imageSprite.totalFrames );
 
         this.imageSprite.animationSpeed = ( this.options.speed ) ? this.options.speed : 0.2;
         this.imageSprite.loop = spriteDef.loop ? spriteDef.loop : false;
