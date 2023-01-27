@@ -42,39 +42,47 @@ class MenuWindow extends Window {
 
     constructor( parent, menuDef ) {
 
-        let winOptions = Tools.clone( menuDef.window );
+        let isTelegram = Game.instance().isTelegram();
+
+        // Расположение окна меню привязываем к расположению кнопки "Menu"
+
+        let menuBtnOptions = Game.instance().controlDef.menu;
+
+        let options = isTelegram ? menuDef.telegram.window : menuDef.window;
+        let winOptions = {
+            vertical: Tools.clone( options ),
+            horizontal: Tools.clone( options )
+        };
+        winOptions.vertical.x = menuBtnOptions.vertical.x + 10;
+        winOptions.vertical.y = menuBtnOptions.vertical.y - options.height;
+        winOptions.horizontal.x = menuBtnOptions.horizontal.x + 10;
+        winOptions.horizontal.y = menuBtnOptions.horizontal.y - options.height;
+
         super( parent, winOptions );
 
-        this.menuDef = menuDef;
-        let menuItemDef = this.menuDef.items;
+        // Пункты меню создаем в зависимости от темы "telegram" игры
 
-        this.signInOutItem = new MenuItem( this, menuItemDef[ 'signInOut' ] );
-        this.signInOutItem.addListener( 'click', ()=>{ this.emit( 'signInOut' ); });
+        let menuItemDef = isTelegram ? menuDef.telegram.items : menuDef.items;
+
+        if ( ! isTelegram ) {
+            this.signInOutItem = new MenuItem( this, menuItemDef[ 'signInOut' ] );
+            this.signInOutItem.addListener( 'click', ()=>{ this.emit( 'signInOut' ); });
+
+            this.depositItem = new MenuItem( this, menuItemDef[ 'deposit' ] );
+            this.depositItem.addListener( 'click', ()=>{ this.emit( 'makeDeposit' ); });
+
+            this.fullScreenItem = new MenuItem( this, menuItemDef[ 'fullScreen' ] );
+            this.fullScreenItem.addListener( 'click', ()=>{ this.onFullScreenClick(); });
+            this.fullScreenState = false;
+        }
 
         this.paytableItem = new MenuItem( this, menuItemDef[ 'paytable' ] );
         this.paytableItem.addListener( 'click', ()=>{ this.emit( 'showPaytable' ); });
 
-        this.depositItem = new MenuItem( this, menuItemDef[ 'deposit' ] );
-        this.depositItem.addListener( 'click', ()=>{ this.emit( 'makeDeposit' ); });
-
         this.soundItem = new MenuItem( this, menuItemDef[ 'sound' ] );
         this.soundItem.addListener( 'click', ()=>{ this.onSoundClick(); });
 
-        this.fullScreenState = false;
-        this.fullScreenItem = new MenuItem( this, menuItemDef[ 'fullScreen' ] );
-        this.fullScreenItem.addListener( 'click', ()=>{ this.onFullScreenClick(); });
-
         this.setVisible( false );
-    }
-
-    draw() {
-        let game = Game.instance();
-        let winOptions = game.isVertical() ? this.menuDef.window.vertical : this.menuDef.window.horizontal;
-        this.options.x = winOptions.x;
-        this.options.y = winOptions.y;
-        this.options.width = winOptions.width;
-        this.options.height = winOptions.height;
-        super.draw();
     }
 
     /**
@@ -84,6 +92,8 @@ class MenuWindow extends Window {
      */
     setVisible( state ) {
 
+        super.setVisible( state );
+
         if ( state ) {  // открыть меню
 
             // Установить доступность элементов меню в зависимости от текущего состояния игры
@@ -91,17 +101,15 @@ class MenuWindow extends Window {
             let game = Game.instance();
             let gameState = game.state;
 
-            this.signInOutItem.setState( game.isUserLogged() > 0 ? 1 : 0 );
-            this.signInOutItem.setEnabled( ! game.isUILocked() );
+            if ( ! game.isTelegram() ) {
+                this.signInOutItem.setState( game.isUserLogged() > 0 ? 1 : 0 );
+                this.signInOutItem.setEnabled( ! game.isUILocked() );
+                this.depositItem.setEnabled( ! game.isUILocked() );
+            }
 
             this.paytableItem.setEnabled( ! game.isUILocked() && ( gameState == Game.State.WAIT_ROTATE || gameState == Game.State.HELP ) );
-
-            this.depositItem.setEnabled( ! game.isUILocked() );
-
             this.soundItem.setState( game.isSoundMuted() ? 1 : 0 );
         }
-
-        super.setVisible( state );
     }
 
     onPaytableClick() {

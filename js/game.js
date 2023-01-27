@@ -184,6 +184,17 @@ class Game extends GameItem {
     demoType = Game.DemoType.WITH_BALANCE;
 
     //==========================================================================
+    //  Темы запуска игры
+    //==========================================================================
+
+    /** Тема при запуске игры */
+    theme;
+
+    isTelegram() {
+        return ( this.theme == 'telegram' );
+    };
+
+    //==========================================================================
     //  Игровые объекты
     //==========================================================================
 
@@ -298,6 +309,7 @@ class Game extends GameItem {
         this.startMode = Game.siteParam( 'type' );
         this.frameUID = Game.siteParam( 'uid' );
         this.sessionID = Game.siteParam( 'session' );
+        this.theme = Game.siteParam( 'theme' );
 
         this.menuWindow = null;
 
