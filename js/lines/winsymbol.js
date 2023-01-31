@@ -83,6 +83,16 @@ class WinSymbol extends GameItem {
         }
     }
 
+    show() {
+        this.anime.gotoAndStop( 0 );
+        this.draw();
+    }
+
+    play() {
+        this.anime.gotoAndPlay( 0 );
+        this.draw();
+    }
+
     draw() {
         let anime = this.anime;
         if ( anime ) {

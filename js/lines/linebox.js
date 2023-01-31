@@ -158,14 +158,17 @@ class LineBox extends GameItem {
         // Показать выигрыш по текущей линии
 
         let num = this.winLineNums[ this.winLineIndex ];    // номер линии от 1 в виде строки
-        if ( num == '100' ) {       // выпали обычные скаттер-символы
+        if ( num == '100' ) {   // выпали скаттер-символы
+            Log.out('Show scatter line');
             this.scatterLine.showWin( this.winLines[ num ] );
         }
         else if ( num == '101' ) {  // выпали скаттер-символы бонус-игры
+            Log.out('Show bonus scatter line');
             this.bonusLine.showWin( this.winLines[ num ] );
         }
         else {                      // выигрыш по линии
-            let index =this.animatedSymbols.length + parseInt( num ) - 1;
+            Log.out( 'Show win line ' + num );
+            let index = this.animatedSymbols.length + parseInt( num ) - 1;
             this.children[ index ].showWin( this.winLines[ num ] );
         }
 
@@ -191,7 +194,7 @@ class LineBox extends GameItem {
      * Перейти к следующей выигрышной линии.
      *
      * @param {object} params параметры вызова:
-     * 'lineBox' - ссылка на объект LineBox
+     * 'self' - ссылка на объект LineBox
      */
     onNextLine( params ) {
         let self = params.self;
@@ -199,14 +202,18 @@ class LineBox extends GameItem {
         // Спрятать текущую линию
 
         let num = self.winLineNums[ self.winLineIndex ];    // номер линии от 1 в виде строки
-        if ( num == '100' ) {       // выпали скаттер-символы
+        if ( num == '100' ) {   // линия из скаттер-символов
+            Log.out( 'Hide scatter line' );
             self.scatterLine.hideWin();
         }
         else if ( num == '101' ) {  // выпали скаттер-символы
+            Log.out( 'Hide bonus scatter line' );
             self.bonusLine.hideWin();
         }
         else {                      // выигрыш по линии
-            self.children[ parseInt( num ) - 1 ].hideWin();
+            Log.out('Hide win line ' + num);
+            let index = self.animatedSymbols.length + parseInt( num ) - 1;
+            self.children[ index ].hideWin();
         }
 
         // Перейти к следующей линии
@@ -235,7 +242,8 @@ class LineBox extends GameItem {
                 this.bonusLine.clearWin();
             }
             else {
-                this.children[ parseInt( num ) - 1 ].clearWin();
+                let index = this.animatedSymbols.length + parseInt( num ) - 1;
+                this.children[ index ].clearWin();
             }
         }
     }
@@ -259,6 +267,8 @@ class LineBox extends GameItem {
      * @param {type} extraLines список выигрышных линий
      */
     startShowExtraLines( params ) {
+
+        this.stopShowWinLines();
 
         this.extraSymbol = params.symbol;
         this.extraReels = Tools.clone( params.reels );
@@ -287,13 +297,19 @@ class LineBox extends GameItem {
         self.animatedSymbols.push( anime );
 
         // Показать символ и сыграть музыку
-        anime.draw();
+        anime.show();
         game.startPlay( "ching" );
 
         if ( ++self.surrentSymbolPos > 2 ) {
 
             self.surrentSymbolPos = 0;
             if ( ++self.currentReelIndex >= self.extraReels.length ) {
+
+                // Запустить анимацию всех символов расширения
+                let cnt = self.animatedSymbols.length;
+                for ( let i = 0; i < cnt; ++i ) {
+                    self.animatedSymbols[ i ].play();
+                }
 
                 // Закончить выкладывание символов расширения на барабанах и
                 // запустить показ линий по символу расширения
@@ -325,6 +341,7 @@ class LineBox extends GameItem {
         // Показать выигрыш по текущей линии
 
         let num = this.winLineNums[ this.winLineIndex ];    // номер линии от 1 в виде строки
+        Log.out( 'Show extra win line ' + num );
         this.children[ parseInt( num ) - 1 ].showExtraWin( {
             symbol: this.extraSymbol,
             reels: this.extraReels,
@@ -338,27 +355,22 @@ class LineBox extends GameItem {
             'line': num,                    // номер линии
             'win':  this.winLines[ num ]    // сумма выигрыша
         });
-
-        // Запустить таймер перехода к следующей линии
-
-//        this.nextLineTimer = setTimeout( this.onNextExtraLine, LineBox.EXTRA_LINE_INTERVAL, { self: this } );
     }
 
     /**
      * Перейти к следующей выигрышной линии по символу расширения.
      *
      * @param {object} params параметры вызова:
-     * 'lineBox' - ссылка на объект LineBox
+     * 'self' - ссылка на объект LineBox
      */
     onNextExtraLine( params ) {
-
-        Log.out( 'LineBox.onNextExtraLine()' );
 
         let self = params.self;
 
         // Спрятать текущую линию
 
         let num = self.winLineNums[ self.winLineIndex ];    // номер линии от 1 в виде строки
+        Log.out( 'Hide extra win line ' + num );
         self.children[ parseInt( num ) - 1 ].hideWin();
 
         // Перейти к следующей линии
@@ -371,7 +383,16 @@ class LineBox extends GameItem {
      * Остановить показ линий по символу расширения.
      */
     stopShowExtraLines() {
-        this.stopShowWinLines();
+
+        // Спрятать текущую линию, если она есть
+
+        if ( this.winLineIndex < this.winLineNums.length ) {
+            let num = this.winLineNums[ this.winLineIndex ];    // номер линии от 1 в виде строки
+            this.children[ parseInt( num ) - 1 ].hideWin();
+        }
+
+        // Удалить все объекты анимации
+
         for ( let i = 0; i < this.animatedSymbols.length; ++i ) {
             let obj = this.animatedSymbols[ i ];
             this.pixiObj.removeChild( obj );
@@ -380,4 +401,3 @@ class LineBox extends GameItem {
         this.animatedSymbols = [];
     }
 }
-

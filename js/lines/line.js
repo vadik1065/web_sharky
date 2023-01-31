@@ -162,8 +162,6 @@ class Line extends GameItem {
         let form = this.options.form;   // форма линии в позициях символов (от 0 до 2)
         if ( this.winObjects.length == 0 ) {
 
-            Log.out( 'Create symbols for win line' );
-
             this.winSymbolCount = winData[ 0 ];
             this.winAmount = winData[ 1 ];
             this.winObjects = [];
@@ -184,8 +182,6 @@ class Line extends GameItem {
             }
         }
         else {
-
-            Log.out( 'Update symbols for win line' );
 
             // Восстановить параметры выигрышных символов
 

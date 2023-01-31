@@ -132,7 +132,8 @@ class SoundPlayer extends GameItem {
             Log.out( 'Not found audio item for ' + name );
             return;
         }
-        Log.out( 'Stop play ' + name );
+        sound.off( 'end' );
+        Log.out( 'Stop play "' + name + '"' );
         sound.stop();
     }
 

@@ -25,25 +25,36 @@ class Log {
 
     static out( text ) {
         if ( Log.enabled ) {
-            extendLog( console.log, text );
+            extendLog( console.log, Log.time() + text );
         }
     }
 
     static info( text ) {
         if ( Log.enabled ) {
-            console.info( text );
+            console.info( Log.time() + text );
         }
     }
 
     static warn( text ) {
         if ( Log.enabled ) {
-            console.warn( text );
+            console.warn( Log.time() + text );
         }
     }
 
     static error( text ) {
         if ( Log.enabled ) {
-            console.error( text );
+            console.error( Log.time() + text );
         }
+    }
+
+    static time() {
+        let d = new Date();
+        let h = d.getHours();
+        let m = d.getMinutes();
+        let s = d.getSeconds();
+        return ( h < 10 ? '0'+h : ''+h ) + ':' +
+               ( m < 10 ? '0'+m : ''+m ) + ':' +
+               ( s < 10 ? '0'+s : ''+s ) + '.' +
+               d.getMilliseconds() + ' ';
     }
 }
