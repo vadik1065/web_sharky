@@ -2067,7 +2067,6 @@ class Game extends GameItem {
      */
     onSpinError( params ) {
         let game = Game.instance();
-        game.reelBox.stopRotate();
 
         // Остановить барабаны так, чтобы не было выигрышных комбинаций
 
