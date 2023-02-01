@@ -98,16 +98,15 @@ class InfoBox extends ImageItem {
                 textItem.options.height = options.height;
                 textItem.options.align = 'center';
                 let balance = game.balance() - game.totalBet;
-                this.textAboveItem.updateText( ( game.isDemoActive() ? 'DEMO BALANCE: ' : 'BALANCE: ' ) + Tools.formatAmount( balance ) );
+                this.textAboveItem.updateText(  i18next.t( game.isDemoActive() ? 'DEMO BALANCE' : 'BALANCE' ,{val: Tools.formatAmount( balance )}) );
                 textItem.setVisible( true );
 
                 this.textBelowItem.setVisible( false );
 
             }
             else {
-
-                let jackText1 = ( jack1.status == 0 ) ? '' : 'JACKPOT 1: ' + Tools.formatAmount( jack1.amount ) + ' / MIN BET: ' + Tools.formatAmount( jack1.minBet );
-                let jackText2 = ( jack2.status == 0 ) ? '' : 'JACKPOT 2: ' + Tools.formatAmount( jack2.amount ) + ' / MIN BET: ' + Tools.formatAmount( jack2.minBet );
+                let jackText1 = ( jack1.status == 0 ) ? '' : i18next.t('JACKPOT 1 / MIN BET', {amount:Tools.formatAmount( jack1.amount ) , minBet:Tools.formatAmount( jack1.minBet )});
+                let jackText2 = ( jack2.status == 0 ) ? '' : i18next.t('JACKPOT 2 / MIN BET', {amount:Tools.formatAmount( jack2.amount) , minBet: Tools.formatAmount( jack2.minBet )});
 
                 // Показать 1-ый джекпот
 

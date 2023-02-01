@@ -46,6 +46,15 @@ class ImageItem extends GameItem {
         this.textureIndex = 0;
         this.imageSprite = new PIXI.Sprite();
         this.pixiObj.addChild( this.imageSprite );
+
+        let curOptions = options.lang?.[Game.instance().lang];
+        if (curOptions){
+            options.x = curOptions.x;
+            options.y = curOptions.y;
+            options.width = curOptions.width;
+            options.height = curOptions.height;
+        }
+
         this.update( options );
     }
 

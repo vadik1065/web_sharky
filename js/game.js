@@ -251,6 +251,12 @@ class Game extends GameItem {
     /** Адрес файла конфигурации */
     configFile;
 
+    /** Файл переводов */
+    langFile;
+
+    /** Язык игры */
+    lang;
+
     //==========================================================================
 
     rootItem;
@@ -356,6 +362,12 @@ class Game extends GameItem {
 //        this.configFile = './conf/mobile.json';
 //        this.configFile = './conf/desktop.json';
         this.addToLoad( this.configFile );
+
+        let lang = Game.siteParam( 'lang', 'en' );	// получаем параметр 'lang' из параметров URL игры
+        this.lang = lang;
+        this.langFile = './langs/' + lang + '.json';
+        this.addToLoad( this.langFile );
+
         this.startLoad( ( result )=>{ this.onConfigLoaded( result ) } );
 
         // Специальные шрифты
@@ -640,6 +652,16 @@ class Game extends GameItem {
      * @param {type} conf
      */
     onConfigLoaded( result ) {
+
+        let res = {};
+        res[this.lang] = {translation : result[ this.langFile ] };
+
+        i18next.init({
+            lng: this.lang,
+            debug: true,
+            resources: res
+         });
+
         let conf = result[ this.configFile ];
 
         this.options = Tools.clone( conf.options );
@@ -891,8 +913,7 @@ class Game extends GameItem {
                     }
                 }
 
-                this.showMsgAbove( "FEATURE WIN: " + Tools.formatAmount( this.totalWinAmount )
-                                 + "\nFREE GAME " + this.freeSpinNum + " OF " + this.freeSpinCount, true );
+                this.showMsgAbove( i18next.t("FEATURE WIN", {val:  Tools.formatAmount( this.totalWinAmount ) })+"\n"+i18next.t("FREE GAME OF" ,{ val1:this.freeSpinNum, val2:this.freeSpinCount}), true );
 
                 // Переключиться в бонус-режим
                 this.background.setBonusMode( true );
@@ -1316,7 +1337,8 @@ class Game extends GameItem {
      * Показать баланс в инфобоксе.
      */
     showBalance( append = 0 ) {
-        this.showMsgBelow( ( this.isDemoActive() ? 'DEMO BALANCE: ' : 'BALANCE: ' ) + Tools.formatAmount( this.balance() + append ) );
+        this.showMsgBelow( i18next.t(( this.isDemoActive() ? 'DEMO BALANCE' : 'BALANCE' ),
+        { val: Tools.formatAmount( this.balance() + append) }));
     }
 
     /**
@@ -1929,7 +1951,7 @@ class Game extends GameItem {
 
         if ( this.savedTotalWinAmount > 0 ) {
             Log.out( 'Winner paid ' + this.savedTotalWinAmount );
-            this.showMsgAbove( 'WINNER PAID ' + Tools.formatAmount( this.savedTotalWinAmount ), true );
+            this.showMsgAbove(  i18next.t('WINNER PAID' , {val : Tools.formatAmount( this.savedTotalWinAmount )}), true );
         }
         else {
             Log.out( 'Game over' );
@@ -1980,7 +2002,7 @@ class Game extends GameItem {
             // Показать номер текущей бесплатной игры
 
             game.freeSpinNum = game.freeSpinCount - game.lastFreeSpin + 1;
-            game.showMsgAbove( "FEATURE WIN: " + Tools.formatAmount( game.totalWinAmount ) + "\nFREE GAME " + game.freeSpinNum + " OF " + game.freeSpinCount, true );
+            game.showMsgAbove( i18next.t("FEATURE WIN", {val:  Tools.formatAmount( game.totalWinAmount ) })+"\n"+i18next.t("FREE GAME OF" ,{ val1:game.freeSpinNum, val2:game.freeSpinCount}), true );     
         }
         else {                          // в обычной игре
 
@@ -2170,7 +2192,7 @@ class Game extends GameItem {
         // Подсчитать и показать выигрыш по линии и общий выигрыш
 
         game.spinWinAmount += winAmount;
-        game.showMsgAbove( Tools.formatAmount( game.spinWinAmount ) + " WIN", true );
+        game.showMsgAbove( i18next.t("WIN",{val : Tools.formatAmount( game.spinWinAmount )}), true );
 
         // Если показ линий уже остановлен - выйти без звука
 
@@ -2329,7 +2351,7 @@ class Game extends GameItem {
 
         // Перейти в режим ожидания выбора игрока
         this.setState( Game.State.WAIT_USER );
-        this.showMsgAbove( Tools.formatAmount( this.totalWinAmount ) + " SATOSHI WIN\nGamble or Take win", true );
+        this.showMsgAbove(  i18next.t("SATOSHI WIN", {val: Tools.formatAmount( this.totalWinAmount ) })+"\n"+"Gamble or Take win", true);
 
         // Включаем мелодию "принятия решения"
         this.playLoop( 'decidegamble' );
@@ -2361,7 +2383,7 @@ class Game extends GameItem {
         }
 
         // Показать последний и общий выигрыш
-        this.showMsgAbove( Tools.formatAmount( this.spinWinAmount ) + " WIN", true );
+        this.showMsgAbove(i18next.t("WIN",{val : Tools.formatAmount( this.spinWinAmount )}), true );
     }
 
     //==========================================================================
@@ -2395,7 +2417,7 @@ class Game extends GameItem {
         game.lineBox.stopShowWinLines();
         game.setState( Game.State.TAKE_WIN );
 
-        game.showMsgBelow( "GAMBLE AMOUNT " + Tools.formatAmount( game.totalWinAmount ) );
+        game.showMsgBelow( i18next.t('GAMBLE AMOUNT', {val: Tools.formatAmount( game.totalWinAmount, 0 )}) );
         game.showBalance();
 
         // Сохранить сумму выигрыша на случай восстановления
@@ -2440,7 +2462,7 @@ class Game extends GameItem {
                 return;
             }
         }
-        game.showMsgAbove( "GAMBLE AMOUNT " + Tools.formatAmount( game.totalWinAmount ) );
+        game.showMsgAbove( i18next.t("GAMBLE AMOUNT" , { val:Tools.formatAmount( game.totalWinAmount )}) );
         game.showBalance( game.savedTotalWinAmount - game.totalWinAmount );
         if ( game.totalWinAmount > 0 ) {
             game.takeWinTimer = setTimeout( game.takeWinPiece, Game.TAKE_WIN_INTERVAL );
@@ -2482,7 +2504,7 @@ class Game extends GameItem {
         // Восстановить состояние перед перетеканием выигрыша
 
         game.totalWinAmount = game.savedTotalWinAmount;
-        game.showMsgBelow( "GAMBLE AMOUNT " + Tools.formatAmount( game.totalWinAmount ) );
+        game.showMsgBelow( i18next.t("GAMBLE AMOUNT" , { val:Tools.formatAmount( game.totalWinAmount )}) );
         game.showBalance();
         Log.out( 'Restore total win ' + game.totalWinAmount );
 
@@ -2665,10 +2687,10 @@ class Game extends GameItem {
 
         if ( this.riskStepPlayed == 0 ) {
             this.showMsgAbove( 'CHOOSE CARD TO GAMBLE\nOR TAKE THE WIN!' );
-            this.showMsgBelow( 'GAMBLE TO WIN ' + Tools.formatAmount( this.totalWinAmount * 2, 0 ) );
+            this.showMsgBelow( i18next.t('GAMBLE TO WIN',{val:Tools.formatAmount( this.totalWinAmount * 2, 0 ) }));
         }
         else {
-            this.showMsgAbove( 'GAMBLE AMOUNT ' + Tools.formatAmount( this.totalWinAmount, 0 ) + '\nGAMBLE TO WIN ' + Tools.formatAmount( this.totalWinAmount * 2, 0 ) );
+            this.showMsgAbove( i18next.t('GAMBLE AMOUNT', {val: Tools.formatAmount( this.totalWinAmount, 0 )}) + '\n'+ i18next.t('GAMBLE TO WIN',{val:Tools.formatAmount( this.totalWinAmount * 2, 0 ) }));
             this.showMsgBelow( '' );
         }
     }
@@ -2721,17 +2743,17 @@ class Game extends GameItem {
         if ( dealerCard > userCard ) {          // проигрыш игрока
             sound = "23_btd_card_open";
             game.showMsgAbove( 'LOSS' );
-            game.showMsgBelow( 'GAMBLE TO WIN ' + Tools.formatAmount( game.totalWinAmount * 2, 0 ) );
+            game.showMsgBelow( i18next.t('GAMBLE TO WIN',{val:Tools.formatAmount( game.totalWinAmount * 2, 0 )}) );
         }
         else if ( dealerCard == userCard ) {   // равенство карт
             sound = "22_btd_card_open_same";
             game.showMsgAbove( 'PARITY' );
-            game.showMsgBelow( 'GAMBLE TO WIN ' + Tools.formatAmount( game.totalWinAmount * 2, 0 ) );
+            game.showMsgBelow( i18next.t('GAMBLE TO WIN',{val:Tools.formatAmount( game.totalWinAmount * 2, 0 )}) );
         }
         else {                                 // выигрыш игрока
             sound = "gamblewin";
             game.totalWinAmount *= 2;
-            game.showMsgAbove( 'GAMBLE AMOUNT ' + Tools.formatAmount( game.totalWinAmount, 0 ) + '\nGAMBLE TO WIN ' + Tools.formatAmount( game.totalWinAmount * 2, 0 ) );
+            game.showMsgAbove( i18next.t('GAMBLE AMOUNT', {val: Tools.formatAmount( game.totalWinAmount, 0 )}) + '\n'+ i18next.t('GAMBLE TO WIN',{val:Tools.formatAmount( game.totalWinAmount * 2, 0 ) }) );
             game.showMsgBelow( '' );
         }
         game.startPlay( sound );
@@ -2917,7 +2939,7 @@ class Game extends GameItem {
 
         // Показать стартовый баннер начала бонус-игры
 
-        this.textBanner.show( '' + this.freeSpinCount + ' Free Games' );
+        this.textBanner.show( i18next.t('Free Games', {val : this.freeSpinCount}));
         this.setState( Game.State.SHOW_BONUS_BANNER );
         this.startPlay( 'autoplaystop', ()=>{
             this.startBannerFinished = true;
@@ -2934,7 +2956,8 @@ class Game extends GameItem {
      * Показать баннер дополнительных бесплатных спинов в бонус-игре.
      */
     showFreeSpinBanner( callback ) {
-        this.textBanner.show( "" + this.serverData.bonusGame.winFreeSpin + ' MORE FREE GAMES' );
+        this.textBanner.show( i18next.t('MORE FREE GAMES', {val : this.serverData.bonusGame.winFreeSpin }));
+
         setTimeout( ()=>{
 
             // Через время, закрыть баннер и сделать переход к заданной функции
@@ -3372,7 +3395,7 @@ class Game extends GameItem {
 
             swimmer.addListener( 'bonusReceived', (params)=>{
                 this.spinWinAmount += params.amount;
-                this.showMsgAbove( Tools.formatAmount( this.spinWinAmount ) + " WIN", true );
+                this.showMsgAbove( i18next.t('WIN', {val:Tools.formatAmount( this.spinWinAmount )}), true );
                 Log.out( 'Add win ' + params.amount + ' from chest' );
             });
 
@@ -3472,8 +3495,8 @@ class Game extends GameItem {
         game.stopPlay( 'origin/feature_background' );
 
         // Показать баннер завершения бонус-игры
-        let text = "Feature Win\n" + Tools.formatAmount( game.totalWinAmount ) + "\n"
-                  + game.freeSpinCount + " Free Games played";
+        let text = i18next.t("Feature Win\n" , {val: Tools.formatAmount( game.totalWinAmount ) })+ "\n"
+        + i18next.t("Free Games played", {val: game.freeSpinCount}) ;
         game.textBanner.show( text );
 
         // Проиграть мелодию при показе завершающего баннера

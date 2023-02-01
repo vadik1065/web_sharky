@@ -137,8 +137,8 @@ class BetWindow extends Window {
             btn.setEnabled( this.betEnabled[i] );
         }
 
-        this.totalBetText.updateText( 'TOTAL BET ' + Tools.formatAmount( game.totalBet ) );
-        this.linesText.updateText( 'LINES ' + Tools.formatAmount( game.selectedLines ) );
+        this.totalBetText.updateText( i18next.t( 'TOTAL BET' ,{val: Tools.formatAmount( game.totalBet )} ));
+        this.linesText.updateText(  i18next.t('LINES', {val:Tools.formatAmount( game.selectedLines )} ));
     }
 
     /**

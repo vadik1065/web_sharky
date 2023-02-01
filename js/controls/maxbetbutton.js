@@ -15,7 +15,7 @@ class MaxBetButton extends ImageButton {
 
         let o = game.isVertical() ? this.options.vertical : this.options.horizontal;
 
-        this.textItem = new TextItem( this, 'MAX\nBET',{
+        this.textItem = new TextItem( this,  i18next.t('MAX\nBET'),{
             fontFamily : 'Arial',
             fontSize: o.text.fontSize,
             color: o.text.color,

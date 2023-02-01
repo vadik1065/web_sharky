@@ -19,14 +19,17 @@ class HelpPage3 extends ImageItem {
             fontWeight: 'bold',
         });
 
-        let text2 = [
-            'All prizes are for combinations of a kind. All prizes are for combinations',
-            'left to right, except scatters. All prizes are on selected lines, except scatters.',
-            'Scatter symbols pay at any position on screen. Highest win only paid on each',
-            'selected line and per scatter combination. Scatter wins and line wins are added.',
-            'The paytable always shows the prizes for the currently selected bet and number',
-            'of lines. Ship can only appear on reel 1, Island only on reel 5.'
-        ];
+        // let text2 = [
+        //     'All prizes are for combinations of a kind. All prizes are for combinations',
+        //     'left to right, except scatters. All prizes are on selected lines, except scatters.',
+        //     'Scatter symbols pay at any position on screen. Highest win only paid on each',
+        //     'selected line and per scatter combination. Scatter wins and line wins are added.',
+        //     'The paytable always shows the prizes for the currently selected bet and number',
+        //     'of lines. Ship can only appear on reel 1, Island only on reel 5.'
+        // ];
+        let text2 = i18next.t(
+            'All prizes are for combinations of a kind. All prizes are for combinations \n left to right, except scatters. All prizes are on selected lines, except scatters. \n Scatter symbols pay at any position on screen. Highest win only paid on each \n selected line and per scatter combination. Scatter wins and line wins are added. \n The paytable always shows the prizes for the currently selected bet and number \n of lines. Ship can only appear on reel 1, Island only on reel 5.'
+        );
         new TextItem( this, text2, {
             x: 0, y: 170,
             color: options.text3.color,

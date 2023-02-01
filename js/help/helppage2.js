@@ -33,7 +33,7 @@ class HelpPage2 extends ImageItem {
                 distance: 0
             }
         };
-        new TextItem( this, '10 Free GAMES at current bet.\nFree Games can be RE-TRIGGERED.', {
+        new TextItem( this, i18next.t('10 Free GAMES at current bet.\nFree Games can be RE-TRIGGERED.'), {
             x: 560, y: 100, width: 655, height: 80, ... textOptions
         });
         new TextItem( this, 'during Free Games lowers new', {
@@ -45,7 +45,7 @@ class HelpPage2 extends ImageItem {
         new TextItem( this, 'substitutes for all symbols except', {
             x: 170, y: 345, width: 455, height: 50, ... textOptions
         });
-        new TextItem( this, 'and             .', {
+        new TextItem( this, i18next.t('and .'), {
             x: 830, y: 345, width: 455, height: 50, ... textOptions
         });
         new TextItem( this, 'adjacent in all directions to', {
@@ -59,15 +59,18 @@ class HelpPage2 extends ImageItem {
         let game = Game.instance();
         let minAward = game.totalBet * 2;
         let maxAward = game.totalBet * 5;
-        this.awardText = new TextItem( this, 'between ' + Tools.formatAmount( minAward ) + ' and ' + Tools.formatAmount( maxAward ) + '.', {
+        this.awardText = new TextItem( this, i18next.t('between v1 and v2.' ,{val1 : Tools.formatAmount( minAward ) , val2: Tools.formatAmount( maxAward ) }) , {
             x: 75, y: 510, width: 470, height: 50, ... textOptions
         });
 
-        new TextItem( this, 'moves across the reels from left to right each', {
-            x: 200, y: 570, width: 650, height: 50, ... textOptions
-        });
-        new TextItem( this, 'free game and is sopped and does not substitute if attacked by             .', {
-            x: 120, y: 620, width: 850, height: 50, ... textOptions
+        // new TextItem( this,'moves across the reels from left to right each', {
+        //     x: 200, y: 570, width: 650, height: 50, ... textOptions
+        // });
+        // new TextItem( this, 'free game and is sopped and does not substitute if attacked by             .', {
+        //     x: 120, y: 620, width: 850, height: 50, ... textOptions
+        // });
+        new TextItem( this,i18next.t(' moves across the reels from left to right each \n free game and is sopped and does not substitute if attacked by .'), {
+            x: 120, y: 570, width: 850, height: 50, ... textOptions, lineHeight:50
         });
     }
 
@@ -88,7 +91,7 @@ class HelpPage2 extends ImageItem {
         let game = Game.instance();
         let minAward = game.totalBet * 2;
         let maxAward = game.totalBet * 5;
-        this.awardText.updateText( 'between ' + Tools.formatAmount( minAward ) + ' and ' + Tools.formatAmount( maxAward ) + '.' );
+        this.awardText.updateText( i18next.t('between v1 and v2.' ,{val1 : Tools.formatAmount( minAward ) , val2: Tools.formatAmount( maxAward ) }));
         super.draw();
     }
 }

@@ -22,7 +22,7 @@ class TotalBetButton extends ImageButton {
 
         let o = game.isVertical() ? this.options.vertical : this.options.horizontal;
 
-        this.textItem1 = new TextItem( this, 'TOTAL BET',{
+        this.textItem1 = new TextItem( this, i18next.t('TOTAL BET',{val:""} ),{
             fontFamily : 'Arial',
             fontSize: o.text1.fontSize,
             color: o.text1.color,

@@ -449,7 +449,7 @@
             "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 26
         },
         "text2": {
-            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 32, "lineHeight": 36
+            "color": "0xF0F622", "fontName": "Times New Roman", "fontSize":{ "default" : 32,"hi":30}, "lineHeight": 36
         },
         "text3": {
             "color": "0xF0F622", "fontName": "Times New Roman", "fontSize": 30, "lineHeight": 40

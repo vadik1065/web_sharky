@@ -14,7 +14,7 @@ class LinesButton extends ImageButton {
 
         let o = game.isVertical() ? this.options.vertical : this.options.horizontal;
 
-        this.textItem1 = new TextItem( this, 'LINES',{
+        this.textItem1 = new TextItem( this, i18next.t('LINES', {val:""}),{
             fontFamily : 'Arial',
             fontSize: o.text1.fontSize,
             color: o.text1.color,

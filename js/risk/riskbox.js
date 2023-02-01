@@ -477,8 +477,10 @@ class RiskBox extends GameItem {
 
     for (let i = 0; i < names.length; ++i) {
       let name = names[i];
-      let title = `${data[name].title} ${name === "gamble" ? this.step : ""}`;
-      // let title = data[name].title ;
+      let title = `${data[name].title}`;
+      if(name === "gamble"){
+        title = i18next.t("gamble",{val: this.step});
+      };     
       let parentTitle = data?.[name]?.parent || this.riskMain;
       let item = new TextItem(parentTitle, title, data[name].options);
       this.riskMain.textItems.push(item);

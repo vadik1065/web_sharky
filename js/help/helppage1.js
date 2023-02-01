@@ -172,7 +172,7 @@ class HelpPage1 extends ImageItem {
             this.textItems.push( item );
         }
 
-        new TextItem( this, 'SUBSTITUTES\nfor  ALL symbols except', {
+        new TextItem( this, i18next.t('SUBSTITUTES\nfor ALL symbols except'), {
             x: 825, y: 40, width: 250, height: 70,
             align: 'centerX',
             color: options.text1_1.color,
@@ -183,7 +183,7 @@ class HelpPage1 extends ImageItem {
             ...this.shadowOptions
         });
 
-        new TextItem( this, 'Free Games', {
+        new TextItem( this, i18next.t('Free Games',{val:""}), {
             x: 525, y: 535, width: 205, height: 36,
             align: 'center',
             color: options.text1_2.color,

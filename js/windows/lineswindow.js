@@ -32,7 +32,7 @@ class LinesWindow extends Window {
             true, true, true, true, true, true, true, true, true, true
         ];
 
-        new TextItem( this, 'LINES', {
+        new TextItem( this, i18next.t('LINES' , {val:""}), {
             fontFamily: 'Arial',
             fontSize: 26,
             x: 30,
@@ -128,8 +128,8 @@ class LinesWindow extends Window {
             btn.setEnabled( this.lineEnabled[i] );
         }
 
-        this.totalBetText.updateText( 'TOTAL BET ' + Tools.formatAmount( game.totalBet ) );
-        this.betLineText.updateText( 'BET/LINE ' + Tools.formatAmount( game.selectedBet ) );
+        this.totalBetText.updateText( i18next.t('TOTAL BET', { val : Tools.formatAmount( game.totalBet )} ));
+        this.betLineText.updateText(  i18next.t('BET/LINE', { val : Tools.formatAmount( game.selectedBet )} ));
     }
 
     /**

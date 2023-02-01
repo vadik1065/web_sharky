@@ -64,7 +64,7 @@ class TextItem extends GameItem {
         }
         for ( let i = 0; i < lines.length; ++i ) {
             let pixiText = this.pixiObj.children[ i ];
-            pixiText.text = lines [ i ];
+            pixiText.text = i18next.t(lines [ i ]);
         }
     }
 
@@ -123,6 +123,12 @@ class TextItem extends GameItem {
     draw() {
 
         if ( ! this.visible ) return;
+
+        if (typeof this.options.fontSize === 'object'){
+            let objFs =  Tools.clone(this.options.fontSize);
+            let lang = Game.instance().lang;
+            this.options.fontSize = objFs[lang] || objFs.default;
+        }
 
         let parentPos = this.parent.pos();
         let parentSize = this.parent.size();
