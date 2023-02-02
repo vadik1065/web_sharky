@@ -363,7 +363,7 @@ class Game extends GameItem {
 //        this.configFile = './conf/desktop.json';
         this.addToLoad( this.configFile );
 
-        let lang = Game.siteParam( 'lang', 'en' );	// получаем параметр 'lang' из параметров URL игры
+        let lang = Game.siteParam( 'lang', 'en' );  // получаем параметр 'lang' из параметров URL игры
         this.lang = lang;
         this.langFile = './langs/' + lang + '.json';
         this.addToLoad( this.langFile );
@@ -548,6 +548,28 @@ class Game extends GameItem {
     }
 
     //==========================================================================
+    //  Стандартные диалоги
+    //==========================================================================
+
+    /**
+     * Показать диалог пополнения баланса.
+     */
+    showBalanceRefill() {
+        if ( this.userId > 0 && ! this.isTelegram() ) {
+            Game.sendOpenDeposit();
+        }
+        else if ( this.startMode == 'demo' ) {
+            this.controlItem('start').setEnabled( false );
+        }
+        else {
+            let dialog = new Dialog( this, this.dialogDef, 'Top up your balance to continue playing.', ['Close'],
+                () => {
+                    dialog.close();
+                    this.controlItem('start').setEnabled( false );
+                }
+            );
+        }
+    }
 
     /**
      * Показать диалог об ошибке.
@@ -1117,8 +1139,8 @@ class Game extends GameItem {
         if ( this.isAutoPlay() ) {
             this.toggleAutoPlay();
         }
-        if ( this.isUserLogged() ) {
-            let dialog = new Dialog( this, this.dialogDef, 'Demo game is over.', ['Close'],
+        if ( this.isUserLogged() || this.isTelegram() ) {
+            let dialog = new Dialog( this, this.dialogDef, 'Demo game is over! Try your luck for real!', ['Close'],
                 () => {
                     dialog.close();
                     this.sendGameClose();
@@ -1790,11 +1812,9 @@ class Game extends GameItem {
             }
             else {
 
-                // Если игрок авторизован, открываем окно пополнения баланса
+                // Предлагаем пополнить баланс для продолжения игры
 
-                if ( game.userId > 0 ) {
-                    game.sendOpenDeposit();
-                }
+                game.showBalanceRefill();
             }
         }
         else if ( game.state == Game.State.HELP ) {             // при показе страниц помощи
@@ -1971,9 +1991,7 @@ class Game extends GameItem {
                 else {
                     this.toggleAutoPlay();
                     this.setState( Game.State.WAIT_ROTATE );
-                    if ( this.userId > 0 ) {
-                        Game.sendOpenDeposit();
-                    }
+                    this.showBalanceRefill();
                 }
             }
         }
@@ -2002,7 +2020,7 @@ class Game extends GameItem {
             // Показать номер текущей бесплатной игры
 
             game.freeSpinNum = game.freeSpinCount - game.lastFreeSpin + 1;
-            game.showMsgAbove( i18next.t("FEATURE WIN", {val:  Tools.formatAmount( game.totalWinAmount ) })+"\n"+i18next.t("FREE GAME OF" ,{ val1:game.freeSpinNum, val2:game.freeSpinCount}), true );     
+            game.showMsgAbove( i18next.t("FEATURE WIN", {val:  Tools.formatAmount( game.totalWinAmount ) })+"\n"+i18next.t("FREE GAME OF" ,{ val1:game.freeSpinNum, val2:game.freeSpinCount}), true );
         }
         else {                          // в обычной игре
 
