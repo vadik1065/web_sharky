@@ -4,7 +4,7 @@
 
 class Swimmer extends AnimatedItem {
 
-    static MOVE_TIME = 300;
+    static MOVE_TIME = 200;
 
     /**
      * Параметры пловца:
