@@ -62,7 +62,7 @@
                 }
             },
             "4": {
-                "totalBet": false, "values": [ 500, 125, 25 ],
+                "totalBet": false, "values": [ 500, 150, 25 ],
                 "normal": {
                     "url": "./images/game/symbols/4.jpg.webp",
                     "sprite": { "columns": 9, "count": 27, "url": "./images/game/symbols/win/4.jpg.webp" }
