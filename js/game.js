@@ -1843,10 +1843,7 @@ class Game extends GameItem {
 
             // Остановить звук выигрышной линии и показ выигрышных линий
 
-            if ( game.currentWinLineSound ) {
-                game.stopPlay( game.currentWinLineSound );
-            }
-            game.lineBox.stopShowWinLines();
+            game.stopShowWinLines(true);
 
             // Подсчитать и показать выигрыш по спину
 
@@ -1899,8 +1896,7 @@ class Game extends GameItem {
 
             // Остановить показ линий
 
-            game.stopPlay( game.currentWinLineSound );
-            game.lineBox.stopShowExtraLines();
+            game.stopShowExtraLines(true);
             game.reelBox.setEnabled( true );
 
             // Подсчитать полный выигрыш по спину
@@ -1950,7 +1946,7 @@ class Game extends GameItem {
 
         Log.out( '--------- Start slot ---------' );
 
-        this.lineBox.stopShowWinLines();
+        this.stopShowWinLines();
 
         // Проверяем останов демо-режима
 
@@ -2008,7 +2004,7 @@ class Game extends GameItem {
         let game = Game.instance();
 
         game.setState( this.isBonusProcess ? Game.State.BONUS_ROTATE : Game.State.ROTATE );
-        game.lineBox.stopShowWinLines();
+        game.stopShowWinLines();
         game.reelBox.startRotate();
 
         // Очистить сумму выигрыша по текущему спину
@@ -2315,12 +2311,9 @@ class Game extends GameItem {
         let game = Game.instance();
 
         // Остановить показ выигрышных линий
-        game.lineBox.stopShowWinLines();
+        game.stopShowWinLines();
 
         if ( game.isBonusProcess ) {        // в процессе бонус-игры
-
-            // Остановить показ обычных выигрышных линий
-            game.lineBox.stopShowWinLines();
 
             if ( game.isBonusStarted() ) {                 // выпал бонус в бонусе
 
@@ -2432,7 +2425,7 @@ class Game extends GameItem {
             return;
         }
 
-        game.lineBox.stopShowWinLines();
+        game.stopShowWinLines();
         game.setState( Game.State.TAKE_WIN );
 
         game.showMsgBelow( i18next.t('GAMBLE AMOUNT', {val: Tools.formatAmount( game.totalWinAmount, 0 )}) );
@@ -2603,7 +2596,7 @@ class Game extends GameItem {
         if ( ! this.riskBox.isOpened() ) {
 
             this.setState( Game.State.RISK_GAME );
-            this.lineBox.stopShowWinLines();
+            this.stopShowWinLines();
             this.serverReplyReceived = false;
 
             // Сохранить описание риск-игры, полученное от сервера.
@@ -3500,6 +3493,25 @@ class Game extends GameItem {
         }
     }
 
+
+    stopShowWinLines(soundSkip) {
+        if ( this.currentWinLineSound && soundSkip) {
+            this.stopPlay( this.currentWinLineSound );
+        }
+        this.lineBox.stopShowWinLines();
+        // Выключить кнопку "Старт", чтобы за время таймаута не было лишнего нажатия
+        this.controlItem('start').setEnabled( false );
+    }
+    
+    stopShowExtraLines(soundSkip) {
+        if ( this.currentWinLineSound && soundSkip) {
+            this.stopPlay( this.currentWinLineSound );
+        }
+        this.lineBox.stopShowExtraLines();
+        // Выключить кнопку "Старт", чтобы за время таймаута не было лишнего нажатия
+        this.controlItem('start').setEnabled( false );
+    }
+
     /**
      * По окончании бонус-игры.
      */
@@ -3509,7 +3521,8 @@ class Game extends GameItem {
 
         game.setState( Game.State.BONUS_FINISH );
 
-        game.lineBox.stopShowWinLines();
+        game.stopShowWinLines();
+        game.controlItem('start').setEnabled( true );
         game.stopPlay( 'origin/feature_background' );
 
         // Показать баннер завершения бонус-игры
