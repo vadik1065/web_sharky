@@ -4,7 +4,7 @@
 
 class Swimmer extends AnimatedItem {
 
-    static MOVE_TIME = 200;
+    static MOVE_TIME = 150;
 
     /**
      * Параметры пловца:
@@ -47,7 +47,7 @@ class Swimmer extends AnimatedItem {
             vertical: options.vertical,
             horizontal: options.horizontal,
             sprite: spriteInfo,
-            speed: 0.2
+            speed: 0.3
         };
         opt.vertical.x = reelPos.vertical[ params.reelIndex ].x - ( options.vertical.width - symbolSize.vertical.width ) / 2;
         opt.vertical.y = reelPos.vertical[ params.reelIndex ].y + symbolSize.vertical.height * params.slotIndex
