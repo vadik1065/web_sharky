@@ -1757,6 +1757,7 @@ class Game extends GameItem {
         let newState = ! btn.isActive();
         Log.out( 'Toggle autoplay to ' + newState );
         btn.setActive( newState );
+        this.stopPlay( newState ? 'autoplaystop' : 'autoplaystart' );
         this.startPlay( newState ? 'autoplaystart' : 'autoplaystop' );
         if ( newState ) {   // включен авто-режим
 
@@ -3033,6 +3034,7 @@ class Game extends GameItem {
 
         this.textBanner.hide();
         this.controlItem('start').setEnabled( false );
+        this.controlItem('autoPlay').setEnabled( false );
 
         // Запускаем анимацию лодки, отплывающей от корабля
 
@@ -3502,7 +3504,7 @@ class Game extends GameItem {
         // Выключить кнопку "Старт", чтобы за время таймаута не было лишнего нажатия
         this.controlItem('start').setEnabled( false );
     }
-    
+
     stopShowExtraLines(soundSkip) {
         if ( this.currentWinLineSound && soundSkip) {
             this.stopPlay( this.currentWinLineSound );
