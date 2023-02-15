@@ -1936,6 +1936,9 @@ class Game extends GameItem {
 
     /** Сумма выигрыша по текущему спину */
     spinWinAmount;
+    
+    /** Сумма выигрыша плавца по текущему спину */
+    swimAmount;
 
     /** Таймер показа следующей выигрышной линии */
     nextLineTimer = 0;
@@ -2010,6 +2013,7 @@ class Game extends GameItem {
 
         // Очистить сумму выигрыша по текущему спину
         game.spinWinAmount = 0;
+        game.swimAmount = 0;
         game.savedTotalWinAmount = 0;
 
         if ( game.isBonusProcess ) {    // в бонус-игре
@@ -2197,7 +2201,6 @@ class Game extends GameItem {
     currentWinLineSound;
 
     onWinLineShown( params ) {
-
         let game = Game.instance();
 
         let lineNum = params.line;
@@ -2221,7 +2224,7 @@ class Game extends GameItem {
         let lineBox = game.lineBox;
         if ( lineNum === "101" ) {  // выпали скаттер-символы начала бонус игры
             game.currentWinLineSound = '';
-            this.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
+            game.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
             return;
         }
 
@@ -2300,8 +2303,9 @@ class Game extends GameItem {
             // Если не задан звук - просто пауза
             Log.warn( 'Skip win line sound' );
             game.currentWinLineSound = '';
-            this.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
+            game.nextLineTimer = setTimeout( lineBox.onNextLine, LineBox.NEXT_LINE_INTERVAL, { self: lineBox } );
         }
+
     }
 
     /**
@@ -2373,7 +2377,8 @@ class Game extends GameItem {
      * Подсчитать полный выигрыш по текущему спину.
      */
     calculateSpinAmount() {
-        this.spinWinAmount = 0;
+        this.spinWinAmount = this.swimAmount;
+        this.swimAmount = 0;
         let wonLines = this.serverData.setWonLines;
         let lines = Object.keys( wonLines );
         for ( let i = 0; i < lines.length; ++i ) {
@@ -3408,6 +3413,7 @@ class Game extends GameItem {
 
             swimmer.addListener( 'bonusReceived', (params)=>{
                 this.spinWinAmount += params.amount;
+                this.swimAmount = this.spinWinAmount;
                 this.showMsgAbove( i18next.t('WIN', {val:Tools.formatAmount( this.spinWinAmount )}), true );
                 Log.out( 'Add win ' + params.amount + ' from chest' );
             });
@@ -3477,9 +3483,6 @@ class Game extends GameItem {
 
         let game = Game.instance();
 
-        // Выключить кнопку "Старт", чтобы за время таймаута не было лишнего нажатия
-        game.controlBox.item( 'start' ).setEnabled( false );
-
         // Добавить к общему выигрышу выигрыш за последний спин
         game.totalWinAmount += game.spinWinAmount;
         Log.info( 'Set total win to ' + game.totalWinAmount );
@@ -3506,6 +3509,8 @@ class Game extends GameItem {
     }
 
     stopShowExtraLines(soundSkip) {
+
+        console.log(19, ' ShowExtraLines');
         if ( this.currentWinLineSound && soundSkip) {
             this.stopPlay( this.currentWinLineSound );
         }
